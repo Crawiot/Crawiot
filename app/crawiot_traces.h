@@ -4,5 +4,6 @@
 
 void setup_traces();
 void send_trace(String message);
+void light_default_led();
 
 #endif
