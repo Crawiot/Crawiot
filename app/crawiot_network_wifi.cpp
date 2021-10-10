@@ -2,6 +2,6 @@
 #include "crawiot_traces.h"
 
 bool enable_wifi() {
-    send_trace("Wi-fi enabled");
+    GlobalTracer.send_trace("Wi-fi enabled");
     return true;
 }
