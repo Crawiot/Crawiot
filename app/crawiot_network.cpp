@@ -3,14 +3,14 @@
 
 void setup_network() {
     if (!enable_wifi()) {
-        send_trace("Failed to enable Wi-Fi module");
+        GlobalTracer.send_trace("Failed to enable Wi-Fi module");
         return;
     }
 
     if (!start_http_server()){
-        send_trace("Failed to start http server");
+        GlobalTracer.send_trace("Failed to start http server");
         return;
     }
 
-    send_trace("Network module initialized");
+    GlobalTracer.send_trace("Network module initialized");
 }

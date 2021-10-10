@@ -2,12 +2,12 @@
 #include "crawiot_network.h"
 
 void crawiot_setup() {
-    setup_traces();
+    GlobalTracer.setup();
     setup_network();
 }
 
 void crawiot_loop() {
-    send_trace("test trace");
+    GlobalTracer.send_trace("test trace");
     while (1){
         
     }
