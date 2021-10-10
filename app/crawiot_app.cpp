@@ -1,5 +1,6 @@
 #include "crawiot_traces.h"
 #include "crawiot_network.h"
+#include "crawiot_tactical.h"
 
 void crawiot_setup() {
     GlobalTracer.setup();

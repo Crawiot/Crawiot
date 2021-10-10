@@ -1,7 +1,7 @@
 #ifndef APP_CRAWIOT_STRATEGIC_H
 #define APP_CRAWIOT_STRATEGIC_H
 
-#include "common.h"
+#include "crawiot_location.h"
 
 class Strategic {
 public:
