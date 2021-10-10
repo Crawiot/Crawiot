@@ -12,4 +12,4 @@ add_library(app
         crawiot_traces.cpp
         crawiot_network.cpp
         crawiot_app.cpp
-        )
+        crawiot_strategic.cpp crawiot_strategic.h crawiot_mediator.cpp crawiot_mediator.h common.h)
