@@ -3,7 +3,7 @@
 
 void crawiot_setup() {
     GlobalTracer.setup();
-    setup_network();
+    NetworkModule.setup();
 }
 
 void crawiot_loop() {
