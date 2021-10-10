@@ -1,0 +1,16 @@
+#ifndef APP_CRAWIOT_STRATEGIC_H
+#define APP_CRAWIOT_STRATEGIC_H
+
+#include "common.h"
+
+class Strategic {
+public:
+    void reach_target();
+
+private:
+    void reach_coordinates(const Coordinates);
+};
+
+extern Strategic StrategicModule;
+
+#endif //APP_CRAWIOT_STRATEGIC_H
