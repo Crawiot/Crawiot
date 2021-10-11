@@ -1,5 +1,6 @@
 #include "crawiot_network.h"
 #include "crawiot_traces.h"
+#include "crawiot_mediator.h"
 
 Network NetworkModule = Network();
 
@@ -17,9 +18,14 @@ void Network::setup() {
     GlobalTracer.send_trace("Network module initialized");
 }
 
-void Network::task(void *pvParameters) {
+[[noreturn]] void Network::task(void *pvParameters) {
     while (1) {
         GlobalTracer.send_trace("Network module is running");
-        delay(1000);
+        const Coordinates cords = {
+                .X = 5,
+                .Y = 3.1
+        };
+        ModulesMediator.push_target(cords);
+        delay(10000);
     }
 }

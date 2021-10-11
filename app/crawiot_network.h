@@ -4,7 +4,7 @@
 class Network {
 
 public:
-    static void task(void *pvParameters);
+    [[noreturn]] static void task(void *pvParameters);
 
     void setup();
 
