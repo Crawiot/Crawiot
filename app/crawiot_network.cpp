@@ -9,10 +9,17 @@ void Network::setup() {
         return;
     }
 
-    if (!this->start_http_server()){
+    if (!this->start_http_server()) {
         GlobalTracer.send_trace("Failed to start http server");
         return;
     }
 
     GlobalTracer.send_trace("Network module initialized");
+}
+
+void Network::task(void *pvParameters) {
+    while (1) {
+        GlobalTracer.send_trace("Network module is running");
+        delay(1000);
+    }
 }

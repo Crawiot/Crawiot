@@ -4,6 +4,8 @@ add_compile_definitions(UBRRH)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories("C:/Program Files/WindowsApps/ArduinoLLC.ArduinoIDE_1.8.51.0_x86__mdqgnx93n4wtt/hardware/arduino/avr/cores/arduino")
+include_directories("C:/Users/bymse/Documents/ArduinoData/packages/esp32/hardware/esp32/1.0.6/tools/sdk/include/freertos")
+
 
 
 add_library(app
