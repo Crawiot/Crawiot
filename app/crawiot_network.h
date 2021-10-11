@@ -2,8 +2,10 @@
 #define Crawiot_Network_h
 
 class Network {
-    
+
 public:
+    static void task(void *pvParameters);
+
     void setup();
 
 private:
@@ -12,6 +14,6 @@ private:
     bool start_http_server();
 };
 
-extern Network NetworkModule; 
+extern Network NetworkModule;
 
 #endif
