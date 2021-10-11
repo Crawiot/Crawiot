@@ -5,9 +5,9 @@
 
 class Tactical {
 public:
-    static void task(void *pvParameters);
+    [[noreturn]] static void task(void *pvParameters);
 
-    void reach_target(const Coordinates[], int count);
+    void reach_target(const Coordinates&);
 };
 
 extern Tactical TacticalModule;
