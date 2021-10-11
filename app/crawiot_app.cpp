@@ -10,11 +10,14 @@
 #include "crawiot_network.h"
 #include "crawiot_tactical.h"
 #include "crawiot_strategic.h"
+#include "crawiot_mediator.h"
 
 
 void crawiot_setup() {
     GlobalTracer.setup();
     NetworkModule.setup();
+    ModulesMediator.setup();
+    
     xTaskCreatePinnedToCore(
             NetworkModule.task, "NetworkModule", 1024, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
 

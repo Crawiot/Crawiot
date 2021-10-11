@@ -1,17 +1,24 @@
 #include "crawiot_mediator.h"
-#include "crawiot_traces.h"
 
 Mediator ModulesMediator = Mediator();
 
-void Mediator::push_coordinates(const Coordinates coordinates) {
-    GlobalTracer.send_trace("Coordinates pushed");
+void Mediator::setup() {
+    this->sub_targets_queue = xQueueCreate(10, sizeof(Coordinates));
+    this->targets_queue = xQueueCreate(4, sizeof(Coordinates));
 }
 
-Coordinates Mediator::pull_coordinates() {
-    struct Coordinates cords = {
-            .X = 0.32,
-            .Y = 3.1
-    };
-    GlobalTracer.send_trace("Coordinates pulled");
-    return cords;
+bool Mediator::push_target(const Coordinates &coordinates) {
+    return xQueueSend(this->targets_queue, &coordinates, 0) == pdPASS;
+}
+
+bool Mediator::pull_target(Coordinates *coordinates) {
+    return xQueueReceive(this->targets_queue, coordinates, 0) == pdTRUE;
+}
+
+bool Mediator::push_sub_target(const Coordinates &coordinates) {
+    return xQueueSend(this->sub_targets_queue, &coordinates, 0) == pdPASS;
+}
+
+bool Mediator::pull_sub_target(Coordinates *coordinates) {
+    return xQueueReceive(this->sub_targets_queue, coordinates, 0) == pdFALSE;
 }
