@@ -29,8 +29,4 @@ void crawiot_setup() {
 }
 
 void crawiot_loop() {
-    GlobalTracer.send_trace("test trace");
-    while (1) {
-
-    }
 }

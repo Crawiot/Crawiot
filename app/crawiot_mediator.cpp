@@ -20,5 +20,5 @@ bool Mediator::push_sub_target(const Coordinates &coordinates) {
 }
 
 bool Mediator::pull_sub_target(Coordinates *coordinates) {
-    return xQueueReceive(this->sub_targets_queue, coordinates, 0) == pdFALSE;
+    return xQueueReceive(this->sub_targets_queue, coordinates, 0) == pdTRUE;
 }
