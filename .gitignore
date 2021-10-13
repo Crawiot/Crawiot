@@ -236,3 +236,4 @@ _Pvt_Extensions
 logs/
 *.orig
 cmake-build-debug
+app/CMakeLists.txt
