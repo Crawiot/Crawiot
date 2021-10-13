@@ -9,8 +9,6 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 
 Set-Location $CrawiotDir;
 
-git update-index --assume-unchanged CMakeLists.txt
-
 $arduinoFolder = (Get-ChildItem -Path "C:\Program Files\WindowsApps\*" -Directory |
     Where-Object { $_.Name.StartsWith("ArduinoLLC.ArduinoIDE") } |
     Select-Object -Last 1).Name;
