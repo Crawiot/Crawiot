@@ -1,8 +1,18 @@
 #include "crawiot_traces.h"
 
+void CircularBuffer::add(String message){
+    
+    if (currentBufferSize < traceBufferLength) ++currentBufferSize;
+    
+    ++recordIndex;
+    recordIndex %= traceBufferLength;
+    buffer[recordIndex] = message;
+}
+
 Tracer GlobalTracer = Tracer();
 
 void Tracer::send_trace(String message) {
+    log.add(message);
     Serial.println(message);
 }
 
