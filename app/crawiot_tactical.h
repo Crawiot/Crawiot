@@ -7,7 +7,10 @@ class Tactical {
 public:
     [[noreturn]] static void task(void *pvParameters);
 
-    void reach_target(const Coordinates&);
+    void reach_target(const Coordinates&, bool );
+
+    Coordinates current_target;
+    bool has_current_target;
 };
 
 extern Tactical TacticalModule;
