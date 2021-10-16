@@ -1,14 +1,15 @@
 #ifndef Crawiot_Network_h
 #define Crawiot_Network_h
 
+#include "crawiot_config.h"
 #include <DNSServer.h>
 
 class Network {
 
 public:
-    void setup();
+    void setup(const Config&);
 
-    void task();
+    [[noreturn]] void task();
 
 private:
     bool enable_wifi(const char *ssid, const char *passphrase);
@@ -19,9 +20,8 @@ private:
 
     DNSServer dnsServer;
     
-    IPAddress deviceIp = IPAddress().fromString("192.168.4.1");
+    IPAddress deviceIp;
 };
 
 extern Network NetworkModule;
-
 #endif
