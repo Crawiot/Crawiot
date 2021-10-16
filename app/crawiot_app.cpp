@@ -14,8 +14,16 @@
 
 
 void crawiot_setup() {
+    
+    const Config config = {
+            .WiFiPassword = "12345678",
+            .HostName = "crawiot.lan",
+            .DeviceIp = "192.168.4.1"
+    };
+    
     GlobalTracer.setup();
-    NetworkModule.setup();
+    NetworkModule.setup(config);
+    
     ModulesMediator.setup();
 
     xTaskCreatePinnedToCore([](void *) {

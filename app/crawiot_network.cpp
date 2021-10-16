@@ -1,18 +1,16 @@
 #include "crawiot_network.h"
 #include "crawiot_traces.h"
-#include "crawiot_mediator.h"
 
 Network NetworkModule = Network();
-
-const char *CRAWIOT_HOST_NAME = "crawiot.lan";
-
-void Network::setup() {
-    if (!this->enable_wifi(CRAWIOT_HOST_NAME, "12345678")) {
+void Network::setup(const Config& config) {
+    this->deviceIp.fromString(config.DeviceIp);
+    
+    if (!this->enable_wifi(config.HostName, config.WiFiPassword)) {
         GlobalTracer.send_trace("Failed to enable Wi-Fi");
         return;
     }
 
-    if (!this->enable_dns(CRAWIOT_HOST_NAME)){
+    if (!this->enable_dns(config.HostName)){
         GlobalTracer.send_trace("Failed to enable DNS");
     }
 
@@ -24,7 +22,7 @@ void Network::setup() {
     GlobalTracer.send_trace("Network module initialized");
 }
 
-void Network::task() {
+[[noreturn]] void Network::task() {
     while (1) { 
         this->dnsServer.processNextRequest(); 
     }
