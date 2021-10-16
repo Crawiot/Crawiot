@@ -19,7 +19,7 @@ private:
 
     DNSServer dnsServer;
     
-    IPAddress ipAddress = IPAddress().fromString("192.168.4.1");
+    IPAddress deviceIp = IPAddress().fromString("192.168.4.1");
 };
 
 extern Network NetworkModule;
