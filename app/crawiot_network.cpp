@@ -4,10 +4,16 @@
 
 Network NetworkModule = Network();
 
+const char *CRAWIOT_HOST_NAME = "crawiot.lan";
+
 void Network::setup() {
-    if (!this->enable_wifi()) {
-        GlobalTracer.send_trace("Failed to enable Wi-Fi module");
+    if (!this->enable_wifi(CRAWIOT_HOST_NAME, "12345678")) {
+        GlobalTracer.send_trace("Failed to enable Wi-Fi");
         return;
+    }
+
+    if (!this->enable_dns(CRAWIOT_HOST_NAME)){
+        GlobalTracer.send_trace("Failed to enable DNS");
     }
 
     if (!this->start_http_server()) {
@@ -18,14 +24,9 @@ void Network::setup() {
     GlobalTracer.send_trace("Network module initialized");
 }
 
-[[noreturn]] void Network::task(void *pvParameters) {
-    while (1) {
-        GlobalTracer.send_trace("Network module is running");
-        const Coordinates cords = {
-                .X = 5,
-                .Y = 3.1
-        };
-        ModulesMediator.push_target(cords);
-        delay(10000);
+void Network::task() {
+    while (1) { 
+        this->dnsServer.processNextRequest(); 
     }
 }
+
