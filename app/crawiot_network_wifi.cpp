@@ -10,7 +10,7 @@ bool Network::enable_wifi(const char *ssid, const char *passphrase) {
         return false;
     }
     
-    WiFi.softAPConfig(this->ipAddress, ipAddress, IPAddress(255, 255, 255, 0));
+    WiFi.softAPConfig(this->deviceIp, deviceIp, IPAddress(255, 255, 255, 0));
 
     GlobalTracer.send_trace("Wi-fi enabled");
     return true;
