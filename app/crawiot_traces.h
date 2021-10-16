@@ -2,18 +2,7 @@
 #define Crawiot_Trace_h
 
 #include <Arduino.h>
-
-const int traceBufferLength = 100;
-
-class CircularBuffer {
-public:
-    void add(String message);
-
-private:
-    int recordIndex = 0;
-    int currentBufferSize = 0;
-    String buffer[traceBufferLength];
-};
+#include "crawiot_circularbuffer.h"
 
 class Tracer {
 public:

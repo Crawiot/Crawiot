@@ -2,17 +2,17 @@
 
 void CircularBuffer::add(String message){
     
-    if (currentBufferSize < traceBufferLength) ++currentBufferSize;
+    if (this->currentBufferSize < traceBufferLength) ++this->currentBufferSize;
     
-    ++recordIndex;
-    recordIndex %= traceBufferLength;
-    buffer[recordIndex] = message;
+    ++this->recordIndex;
+    this->recordIndex %= traceBufferLength;
+    this->buffer[this->recordIndex] = message;
 }
 
 Tracer GlobalTracer = Tracer();
 
 void Tracer::send_trace(String message) {
-    log.add(message);
+    this->log.add(message);
     Serial.println(message);
 }
 
