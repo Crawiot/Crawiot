@@ -17,9 +17,10 @@ void crawiot_setup() {
     GlobalTracer.setup();
     NetworkModule.setup();
     ModulesMediator.setup();
-    
-    xTaskCreatePinnedToCore(
-            NetworkModule.task, "NetworkModule", 1024, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
+
+    xTaskCreatePinnedToCore([](void *) {
+        NetworkModule.task();
+    }, "NetworkModule", 1024 * 3, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
 
     xTaskCreatePinnedToCore(
             StrategicModule.task, "StrategicModule", 1024, NULL, 2, NULL, ARDUINO_RUNNING_CORE);
