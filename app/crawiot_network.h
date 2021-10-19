@@ -1,19 +1,27 @@
 #ifndef Crawiot_Network_h
 #define Crawiot_Network_h
 
+#include "crawiot_config.h"
+#include <DNSServer.h>
+
 class Network {
 
 public:
-    [[noreturn]] static void task(void *pvParameters);
+    void setup(const Config&);
 
-    void setup();
+    [[noreturn]] void task();
 
 private:
-    bool enable_wifi();
+    bool enable_wifi(const char *ssid, const char *passphrase);
+
+    bool enable_dns(const char *hostName);
 
     bool start_http_server();
+
+    DNSServer dnsServer;
+    
+    IPAddress deviceIp;
 };
 
 extern Network NetworkModule;
-
 #endif
