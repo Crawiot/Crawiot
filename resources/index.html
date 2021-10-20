@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crawiot</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css"
+          integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="content">
+    <form action="/api/target" class="pure-form pure-form-aligned">
+        <fieldset class="">
+
+            <div class="pure-control-group">
+                <label for="xInput">X</label>
+                <input type="number" id="xInput"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="yInput">Y</label>
+                <input type="number" id="yInput"/>
+            </div>
+            <div class="pure-controls">
+                <button id="submitButton" type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+            <div id="statusMessage"></div>
+
+        </fieldset>
+        <hr>
+        <a href="/api/traces">Link to traces</a>
+
+    </form>
+</div>
+<style>
+    .content {
+        margin: 10px auto;
+        padding: 0 2em;
+        max-width: 800px;
+        line-height: 1.6em;
+    }
+
+    #submitButton {
+        margin-bottom: 5px;
+    }
+</style>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const xVal = urlParams.get('x');
+    const yVal = urlParams.get('y');
+    const isSuccess = urlParams.get('success');
+    if (xVal != null && !isNaN(Number(xVal))) {
+        document.getElementById("xInput").value = xVal
+    }
+    if (yVal != null && !isNaN(Number(yVal))) {
+        document.getElementById("yInput").value = yVal
+    }
+    if (isSuccess === 'true') {
+        document.getElementById("statusMessage").textContent = "Device accepted the target"
+    } else if (isSuccess === 'false') {
+        document.getElementById("statusMessage").textContent = "Target dismissed"
+    }
+</script>
+</body>
+</html>
