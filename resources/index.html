@@ -10,11 +10,8 @@
 <body>
 <div class="content">
     <form action="/api/target" class="pure-form pure-form-aligned">
-        <fieldset>
-            <legend class="content">
-                <a href="/api/traces">Link to traces</a>
-                <div>Crawiot control panel:</div>
-            </legend>
+        <fieldset class="">
+
             <div class="pure-control-group">
                 <label for="xInput">X</label>
                 <input type="number" id="xInput"/>
@@ -24,19 +21,26 @@
                 <input type="number" id="yInput"/>
             </div>
             <div class="pure-controls">
-                <button type="submit" class="pure-button pure-button-primary">Submit</button>
-                <div id="statusMessage"></div>
+                <button id="submitButton" type="submit" class="pure-button pure-button-primary">Submit</button>
             </div>
+            <div id="statusMessage"></div>
 
         </fieldset>
+        <hr>
+        <a href="/api/traces">Link to traces</a>
+
     </form>
 </div>
 <style>
     .content {
-        margin: 0 auto;
+        margin: 10px auto;
         padding: 0 2em;
         max-width: 800px;
         line-height: 1.6em;
+    }
+
+    #submitButton {
+        margin-bottom: 5px;
     }
 </style>
 <script>
