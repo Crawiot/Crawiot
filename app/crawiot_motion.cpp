@@ -1,7 +1,7 @@
 #include "crawiot_motion.h"
 #include <Arduino.h>
 
-extern Motion MotionModule;
+Motion MotionModule;
 
 static const int SERVO_PIN_D13 = 13;
 
