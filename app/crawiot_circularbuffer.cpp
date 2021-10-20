@@ -10,9 +10,9 @@ void CircularBuffer::add(String message){
     this->recordIndex %= traceBufferLength;
 }
 
-String CircularBuffer::send_trace() {
+String CircularBuffer::get_combined_trace() {
 
-    if (!this->currentBufferSize) return String();
+    if (!this->currentBufferSize) return String("There's no traces");
 
     int firstIndex = (traceBufferLength + this->recordIndex - this->currentBufferSize) % traceBufferLength;
     String finalLog = this->buffer[firstIndex] + "\r\n";
