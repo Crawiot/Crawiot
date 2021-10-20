@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crawiot</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<form action="/api/target" class="pure-form">
+    <fieldset>
+        <legend>Crawiot control panel:</legend>
+        <input id="xInput" type="text" placeholder="X" />
+        <input id="yInput" type="text" placeholder="Y" />
+        <button type="submit" class="pure-button pure-button-primary">Send data</button>
+    </fieldset>
+    <div id="statusMessage"></div>
+</form>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const xVal = urlParams.get('x');
+    const yVal = urlParams.get('y');
+    const isSuccess = urlParams.get('success');
+    if(xVal != null) {
+        document.getElementById("xInput").value= xVal
+    }
+    if(yVal != null) {
+        document.getElementById("yInput").value= yVal
+    }
+    if(isSuccess != null) {
+        if (isSuccess === 'true') {
+            document.getElementById("statusMessage").textContent = "Successfully sent data"
+        } else {
+            document.getElementById("statusMessage").textContent = "An error occurred during data transfer"
+        }
+    }
+</script>
+</body>
+</html>
