@@ -8,7 +8,7 @@ const int traceBufferLength = 100;
 class CircularBuffer {
 public:
     void add(String message);
-    String send_trace();
+    String get_combined_trace();
 
 private:
     int recordIndex = 0;

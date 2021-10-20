@@ -1,14 +1,5 @@
 #include "crawiot_traces.h"
 
-void CircularBuffer::add(String message){
-    
-    if (this->currentBufferSize < traceBufferLength) ++this->currentBufferSize;
-    
-    ++this->recordIndex;
-    this->recordIndex %= traceBufferLength;
-    this->buffer[this->recordIndex] = message;
-}
-
 Tracer GlobalTracer = Tracer();
 
 void Tracer::send_trace(String message) {
