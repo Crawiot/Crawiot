@@ -54,12 +54,10 @@
     if (yVal != null && !isNaN(Number(yVal))) {
         document.getElementById("yInput").value = yVal
     }
-    if (isSuccess) {
-        if (isSuccess === 'true') {
-            document.getElementById("statusMessage").textContent = "Device accepted the target"
-        } else {
-            document.getElementById("statusMessage").textContent = "Target dismissed"
-        }
+    if (isSuccess === 'true') {
+        document.getElementById("statusMessage").textContent = "Device accepted the target"
+    } else if (isSuccess === 'false') {
+        document.getElementById("statusMessage").textContent = "Target dismissed"
     }
 </script>
 </body>
