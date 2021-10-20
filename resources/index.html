@@ -25,6 +25,7 @@
             </div>
             <div class="pure-controls">
                 <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                <div id="statusMessage"></div>
             </div>
 
         </fieldset>
@@ -51,9 +52,9 @@
     }
     if (isSuccess) {
         if (isSuccess === 'true') {
-            document.getElementById("statusMessage").textContent = "Successfully sent data"
+            document.getElementById("statusMessage").textContent = "Device accepted the target"
         } else {
-            document.getElementById("statusMessage").textContent = "An error occurred during data transfer"
+            document.getElementById("statusMessage").textContent = "Target dismissed"
         }
     }
 </script>
