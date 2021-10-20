@@ -1,5 +1,3 @@
-$mainPageVariableValue = "";
-
 $mainPageVariableValue = [System.String]::Join("", [System.IO.File]::ReadAllLines(".\Resources\index.html")).Replace('"', '\"');
 
 $fileContent = @"
