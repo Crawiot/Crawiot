@@ -11,6 +11,7 @@
 #include "crawiot_tactical.h"
 #include "crawiot_strategic.h"
 #include "crawiot_mediator.h"
+#include "crawiot_motion.h"
 
 
 void crawiot_setup() {
@@ -18,11 +19,13 @@ void crawiot_setup() {
     const Config config = {
             .WiFiPassword = "12345678",
             .HostName = "crawiot.lan",
-            .DeviceIp = "192.168.4.1"
+            .DeviceIp = "192.168.4.1",
+            .FirstSpeedDegree = 45
     };
     
     GlobalTracer.setup();
     NetworkModule.setup(config);
+    MotionModule.setup(config);
     
     ModulesMediator.setup();
 
