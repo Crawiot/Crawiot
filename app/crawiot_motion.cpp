@@ -1,37 +1,33 @@
-//
-// Created by user on 10/10/2021.
-//
-
 #include "crawiot_motion.h"
-#include <Servo.h>
+#include <Arduino.h>
 
-static const int servoPin = 13;
-static const int degree = 90; //Для начала какой-нить рандомный угол поворота
-Servo servo1;
+extern Motion MotionModule;
 
-void setup() {
-    Serial.begin(115200);
-    servo1.attach(servoPin);
+static const int SERVO_PIN_D13 = 13;
+
+void Motion::setup(const Config &config) {
+    this->firstSpeedDegree = config.FirstSpeedDegree;
+    this->servo.attach(SERVO_PIN_D13);
 }
-void startRotate(int degree){
-  for(int posDegrees = 0; posDegrees <= degree; posDegrees++) {
-        servo1.write(posDegrees);
+
+void Motion::startRotate(int degree) {
+    for (int posDegrees = 0; posDegrees <= degree; posDegrees++) {
+        this->servo.write(posDegrees);
         delay(40); //Скорость вращения если что поменяем тут
     }
 }
 
-void stopRotate(int degree){
-  for(int posDegrees = degree; posDegrees >= 0; posDegrees--) {
-        servo1.write(posDegrees);
-        delay(40);
-    }
+void Motion::stopRotate() {
+    this->servo.write(0);
 }
 
-
-
-void loop() { //Она пока будет крутиться до конца, немного ждать и топать обратно
-  startRotate(degree);
-  delay(1000);
-  stopRotate(degree);
-  
+void Motion::execute(MotionEngineCommand command) {
+    switch (command) {
+        case MoveForward:
+            startRotate(this->firstSpeedDegree);
+            break;
+        case Stop:
+            stopRotate();
+            break;
+    }
 }
