@@ -8,7 +8,7 @@ $fileContent = @"
 #ifndef APP_CRAWIOT_MAIN_PAGE_H
 #define APP_CRAWIOT_MAIN_PAGE_H
 
-const char* CrawiotIndexPage = "$mainPageVariableValue"
+const char* CrawiotIndexPage = "$mainPageVariableValue";
 
 #endif //APP_CRAWIOT_MAIN_PAGE_H
 "@

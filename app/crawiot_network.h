@@ -5,6 +5,8 @@
 #include <DNSServer.h>
 #include <WebServer.h>
 
+extern WebServer webServer;
+
 class Network {
 
 public:
@@ -20,8 +22,6 @@ private:
     bool start_http_server();
 
     DNSServer dnsServer;
-
-    WebServer webServer;
     
     IPAddress deviceIp;
 };

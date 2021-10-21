@@ -2,6 +2,7 @@
 #include "crawiot_traces.h"
 
 Network NetworkModule = Network();
+
 void Network::setup(const Config& config) {
     this->deviceIp.fromString(config.DeviceIp);
     
@@ -25,7 +26,7 @@ void Network::setup(const Config& config) {
 [[noreturn]] void Network::task() {
     while (1) { 
         this->dnsServer.processNextRequest();
-        this->webServer.handleClient();
+        webServer.handleClient();
     }
 }
 
