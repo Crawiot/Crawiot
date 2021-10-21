@@ -3,6 +3,7 @@
 
 #include "crawiot_config.h"
 #include <DNSServer.h>
+#include <WebServer.h>
 
 class Network {
 
@@ -19,6 +20,8 @@ private:
     bool start_http_server();
 
     DNSServer dnsServer;
+
+    WebServer webServer;
     
     IPAddress deviceIp;
 };
