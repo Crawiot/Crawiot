@@ -24,7 +24,8 @@ void Network::setup(const Config& config) {
 
 [[noreturn]] void Network::task() {
     while (1) { 
-        this->dnsServer.processNextRequest(); 
+        this->dnsServer.processNextRequest();
+        this->webServer.handleClient();
     }
 }
 
