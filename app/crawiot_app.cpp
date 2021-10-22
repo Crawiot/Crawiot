@@ -25,6 +25,7 @@ void crawiot_setup() {
             .HostName = "crawiot.lan",
             .DeviceIp = "192.168.4.1",
             .FirstSpeedDegree = 45
+            .WheelRadius = 145
     };
     GlobalTracer.setup();
     GlobalLocationManager.current_location.X = 0;
