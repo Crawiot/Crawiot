@@ -8,6 +8,7 @@ class Tracer {
 public:
     void setup();
     void send_trace(String message);
+    String get_traces();
     void light_default_led();
 
 private:
