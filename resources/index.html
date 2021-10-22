@@ -168,8 +168,8 @@
     </style>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      const xVal = urlParams.get("x");
-      const yVal = urlParams.get("y");
+      const xVal = urlParams.get("X");
+      const yVal = urlParams.get("Y");
       const isSuccess = urlParams.get("success");
       if (xVal != null && !isNaN(Number(xVal))) {
         document.getElementById("X").value = xVal;

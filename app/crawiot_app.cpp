@@ -26,8 +26,12 @@ void crawiot_setup() {
             .DeviceIp = "192.168.4.1",
             .FirstSpeedDegree = 45
     };
-
     GlobalTracer.setup();
+    GlobalLocationManager.current_location = {
+            .Y = 0,
+            .X = 0
+    };
+    
     NetworkModule.setup(config);
     MotionModule.setup(config);
 
