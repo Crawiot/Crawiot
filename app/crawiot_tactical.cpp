@@ -1,41 +1,34 @@
 #include "crawiot_tactical.h"
-#include "Arduino.h"
-#include "crawiot_traces.h"
 #include "crawiot_mediator.h"
 #include "crawiot_motion.h"
+#include "crawiot_strategic.h"
+#include "crawiot_traces.h"
 
 Tactical TacticalModule = Tactical();
 
-[[noreturn]] void Tactical::task(void *pvParameters) {
+[[noreturn]] void Tactical::task() {
     while (1) {
-        Coordinates cords;
-
-        bool was_pulled = true;
         if (!TacticalModule.has_current_target) {
-            was_pulled = ModulesMediator.pull_sub_target(&cords);
-
-            if (was_pulled) {
-                TacticalModule.current_target = cords;
-                TacticalModule.has_current_target = true;
-            }
+            const bool was_pulled = ModulesMediator.pull_sub_target(&this->current_target);
+            TacticalModule.has_current_target = was_pulled;
         }
-        TacticalModule.reach_target(cords,was_pulled);
-        delay(500);
+
+        this->reach_current_target();
     }
 }
 
-void Tactical::reach_target(const Coordinates &target_coordinates, bool was_pulled) {
-    if (!TacticalModule.has_current_target){
-        if (!was_pulled)
-            MotionModule.execute(Stop);
+void Tactical::reach_current_target() {
+    if (!TacticalModule.has_current_target) {
+        GlobalTracer.send_trace("Tactical. Stop");
+        MotionModule.execute(Stop);
         return;
     }
 
-        if (GlobalLocationManager.current_location.X - this->current_target.X < 0) {
-            MotionModule.execute(MoveForward);
-        }
-        else {
-            this->has_current_target = false;
-        }
-
+    const int diff = calculate_diff(this->current_target.X, GlobalLocationManager.current_location.X);
+    if (diff > 0) {
+        GlobalTracer.send_trace("Tactical. Moving forward");
+        MotionModule.execute(MoveForward);
+    } else {
+        this->has_current_target = false;
+    }
 }
