@@ -2,8 +2,7 @@
 #define CRAWIOT_CIRCULARBUFFER_H
 
 #include <Arduino.h>
-
-const int traceBufferLength = 100;
+#define TRACES_BUFFER_LENGTH 20
 
 class CircularBuffer {
 public:
@@ -13,7 +12,7 @@ public:
 private:
     int recordIndex = 0;
     int currentBufferSize = 0;
-    String buffer[traceBufferLength];
+    String buffer[TRACES_BUFFER_LENGTH];
 };
 
 #endif

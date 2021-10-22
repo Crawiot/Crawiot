@@ -1,13 +1,22 @@
 #include "crawiot_circularbuffer.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 
+const int traceBufferLength = TRACES_BUFFER_LENGTH;
+
+static auto bufferSemaphore = xSemaphoreCreateBinary();
 
 void CircularBuffer::add(String message) {
-
-    if (this->currentBufferSize < traceBufferLength) ++this->currentBufferSize;
+    xSemaphoreTake(bufferSemaphore, pdMS_TO_TICKS(50));
+    
+    if (this->currentBufferSize < traceBufferLength) 
+        ++this->currentBufferSize;
 
     this->buffer[this->recordIndex] = message;
     ++this->recordIndex;
     this->recordIndex %= traceBufferLength;
+
+    xSemaphoreGive(bufferSemaphore);
 }
 
 String CircularBuffer::get_combined_trace() {
