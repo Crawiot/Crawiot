@@ -24,7 +24,7 @@ void crawiot_setup() {
             .WiFiPassword = "12345678",
             .HostName = "crawiot.lan",
             .DeviceIp = "192.168.4.1",
-            .FirstSpeedDegree = 45
+            .FirstSpeedDegree = 45,
             .WheelRadius = 145
     };
     GlobalTracer.setup();
