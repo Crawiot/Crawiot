@@ -4,8 +4,6 @@
 #include <freertos/task.h>
 #include <cmath>
 
-Strategic StrategicModule = Strategic();
-
 [[noreturn]] void Strategic::task() {
     while (1) {
 

@@ -1,8 +1,6 @@
 #include "crawiot_network.h"
 #include "crawiot_traces.h"
 
-Network NetworkModule = Network();
-
 void Network::setup(const Config& config) {
     this->deviceIp.fromString(config.DeviceIp);
     

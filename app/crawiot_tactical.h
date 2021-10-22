@@ -12,6 +12,4 @@ private:
     bool has_current_target;
 };
 
-extern Tactical TacticalModule;
-
 #endif //APP_CRAWIOT_TACTICAL_H
