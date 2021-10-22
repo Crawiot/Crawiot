@@ -10,8 +10,6 @@ private:
     void reach_coordinates(const Coordinates);
 };
 
-extern Strategic StrategicModule;
-
 int calculate_diff(int current, int target) {
     return target - current;
 }

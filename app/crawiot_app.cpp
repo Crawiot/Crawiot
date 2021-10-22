@@ -14,6 +14,10 @@
 #include "crawiot_motion.h"
 
 
+Strategic StrategicModule = Strategic();
+Tactical TacticalModule = Tactical();
+Network NetworkModule = Network();
+
 void crawiot_setup() {
 
     const Config config = {

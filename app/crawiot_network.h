@@ -26,5 +26,4 @@ private:
     IPAddress deviceIp;
 };
 
-extern Network NetworkModule;
 #endif

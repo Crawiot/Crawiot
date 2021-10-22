@@ -4,13 +4,11 @@
 #include "crawiot_strategic.h"
 #include "crawiot_traces.h"
 
-Tactical TacticalModule = Tactical();
-
 [[noreturn]] void Tactical::task() {
     while (1) {
-        if (!TacticalModule.has_current_target) {
+        if (!this->has_current_target) {
             const bool was_pulled = ModulesMediator.pull_sub_target(&this->current_target);
-            TacticalModule.has_current_target = was_pulled;
+            this->has_current_target = was_pulled;
         }
 
         this->reach_current_target();
@@ -18,7 +16,7 @@ Tactical TacticalModule = Tactical();
 }
 
 void Tactical::reach_current_target() {
-    if (!TacticalModule.has_current_target) {
+    if (!this->has_current_target) {
         GlobalTracer.send_trace("Tactical. Stop");
         MotionModule.execute(Stop);
         return;
