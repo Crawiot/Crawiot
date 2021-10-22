@@ -1,33 +1,50 @@
 #include "crawiot_strategic.h"
 #include "crawiot_traces.h"
 #include "crawiot_mediator.h"
+#include <freertos/task.h>
+#include <cmath>
 
 Strategic StrategicModule = Strategic();
 
-[[noreturn]] void Strategic::task(void *pvParameters) {
+[[noreturn]] void Strategic::task() {
     while (1) {
-        GlobalTracer.send_trace("Strategic module is running");
 
         Coordinates target;
         const bool was_pulled = ModulesMediator.pull_target(&target);
-        GlobalTracer.send_trace(was_pulled ? "Strategic. Target pulled" : "Strategic. No target");
 
         if (was_pulled) {
-            StrategicModule.reach_coordinates(target);
+            GlobalTracer.send_trace("Strategic. Target acquired");
+            this->reach_coordinates(target);
         }
 
-        delay(1000);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 
+float calculate_diff(int current, int target) {
+    return target - current;
+}
+
 void Strategic::reach_coordinates(const Coordinates coordinates) {
-    for (int i = 0; i < coordinates.X; ++i) {
-        
-        const Coordinates sub_crods = {
-                .X = static_cast<float>(i),
-                .Y = coordinates.Y
-        };
-        
-        ModulesMediator.push_sub_target(sub_crods);
+    const int current_x = GlobalLocationManager.current_location.X;
+
+    float diff = calculate_diff(coordinates.X, current_x);
+
+    if (diff < 0) {
+        GlobalTracer.send_trace("Strategic. Can't reach the target");
+        return;
     }
+
+    for (int sub_target_x = current_x; calculate_diff(sub_target_x, coordinates.X) >= 1;) {
+        const Coordinates sub_target = {
+                .X = sub_target_x,
+                .Y = GlobalLocationManager.current_location.Y
+        };
+        const bool was_pushed = ModulesMediator.push_sub_target(sub_target);
+        
+        if (was_pushed) {
+            sub_target_x += 1;
+        }
+    }
+    GlobalTracer.send_trace("Strategic. Diff is less than 1");
 }
