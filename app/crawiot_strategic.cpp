@@ -21,10 +21,6 @@ Strategic StrategicModule = Strategic();
     }
 }
 
-float calculate_diff(int current, int target) {
-    return target - current;
-}
-
 void Strategic::reach_coordinates(const Coordinates coordinates) {
     const int current_x = GlobalLocationManager.current_location.X;
 

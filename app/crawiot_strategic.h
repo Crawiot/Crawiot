@@ -12,4 +12,8 @@ private:
 
 extern Strategic StrategicModule;
 
+int calculate_diff(int current, int target) {
+    return target - current;
+}
+
 #endif //APP_CRAWIOT_STRATEGIC_H

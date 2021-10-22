@@ -2,8 +2,8 @@
 #define APP_CRAWIOT_LOCATION_H
 
 struct Coordinates {
-    float X;
-    float Y;
+    int X;
+    int Y;
 };
 
 class LocationManager {
