@@ -25,7 +25,7 @@ void crawiot_setup() {
             .HostName = "crawiot.lan",
             .DeviceIp = "192.168.4.1",
             .FirstSpeedDegree = 45,
-            .WheelRadius = 145
+            .WheelRadius = 1
     };
     GlobalTracer.setup();
     GlobalLocationManager.current_location.X = 0;
@@ -47,6 +47,10 @@ void crawiot_setup() {
     xTaskCreatePinnedToCore([](void *) {
         TacticalModule.task();
     }, "TacticalModule", 1024, NULL, 2, NULL, ARDUINO_RUNNING_CORE);
+    
+    xTaskCreatePinnedToCore([](void *) {
+        MotionModule.task();
+    }, "MotionModule", 1024, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
 }
 
 void crawiot_loop() {

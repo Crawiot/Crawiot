@@ -3,6 +3,7 @@
 
 #include <Servo.h>
 #include "crawiot_config.h"
+#include "crawiot_motion_tracker.h"
 
 enum MotionEngineCommand {
     Stop,
@@ -13,16 +14,12 @@ class Motion {
 public:
     void setup(const Config&);
     void execute(MotionEngineCommand);
-
+    void task();
 private:
     Servo servo;
     int firstSpeedDegree;
-
-    int wheelRadius;
-
+    Tracker tracker;
     void startRotate(int degree);
-
-    void onWheelRotation();
 };
 
 extern Motion MotionModule;
