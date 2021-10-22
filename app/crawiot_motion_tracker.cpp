@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "crawiot_motion_tracker.h"
 #include "crawiot_location.h"
+#include "crawiot_traces.h"
 
 static const int HALL_PIN_D4 = 4;
 
@@ -30,6 +31,10 @@ void Tracker::setup(const Config &config) {
         if (received) {
             const float val = (int) 2 * 3.1415 * this->wheelRadius;
             GlobalLocationManager.current_location.X += val;
+            
+            String message = "Motion. Current coordinate ";
+            message.concat(GlobalLocationManager.current_location.X);
+            GlobalTracer.send_trace(message);
         }
     }
 }
