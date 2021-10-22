@@ -18,9 +18,11 @@ private:
     Servo servo;
     int firstSpeedDegree;
 
+    int wheelRadius;
+
     void startRotate(int degree);
 
-    void stopRotate();
+    void onWheelRotation();
 };
 
 extern Motion MotionModule;
