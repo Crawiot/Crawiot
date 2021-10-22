@@ -167,30 +167,48 @@
       }
     </style>
     <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const xVal = urlParams.get("X");
-      const yVal = urlParams.get("Y");
-      const isSuccess = urlParams.get("success");
-      if (xVal != null && !isNaN(Number(xVal))) {
-        document.getElementById("X").value = xVal;
-      }
-      if (yVal != null && !isNaN(Number(yVal))) {
-        document.getElementById("Y").value = yVal;
-      }
-
       const messageElement = document.getElementById("statusMessage");
+      const xInput = document.getElementById("X");
+      const yInput = document.getElementById("Y");
+      const urlParams = new URLSearchParams(window.location.search);
 
-      const showMessageSection = () =>
-        (messageElement.parentElement.style = "");
+      handleMessage();
+      handleInputs();
 
-      if (isSuccess === "true") {
-        messageElement.textContent = "Device accepted the target";
-        messageElement.classList.add("success");
-        showMessageSection();
-      } else if (isSuccess === "false") {
-        messageElement.textContent = "Target dismissed";
-        messageElement.classList.add("error");
-        showMessageSection();
+      function handleInputs() {
+        xInput.addEventListener("input", () => {
+          chnageMessageVisibility(false);
+        });
+
+        yInput.addEventListener("input", () => {
+          chnageMessageVisibility(false);
+        });
+
+        const xVal = urlParams.get("X");
+        const yVal = urlParams.get("Y");
+        if (xVal != null && !isNaN(Number(xVal))) {
+          xInput.value = xVal;
+        }
+        if (yVal != null && !isNaN(Number(yVal))) {
+          yInput.value = yVal;
+        }
+      }
+
+      function handleMessage() {
+        const isSuccess = urlParams.get("success");
+        if (isSuccess === "true") {
+          messageElement.textContent = "Device accepted the target";
+          messageElement.classList.add("success");
+          chnageMessageVisibility(true);
+        } else if (isSuccess === "false") {
+          messageElement.textContent = "Target dismissed";
+          messageElement.classList.add("error");
+          chnageMessageVisibility(true);
+        }
+      }
+
+      function chnageMessageVisibility(visible) {
+        messageElement.parentElement.style = visible ? "" : "display: none;";
       }
     </script>
   </body>
