@@ -3,6 +3,7 @@
 #include "crawiot_motion.h"
 #include "crawiot_strategic.h"
 #include "crawiot_traces.h"
+#include "crawiot_common.h"
 
 [[noreturn]] void Tactical::task() {
     while (1) {
