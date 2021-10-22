@@ -1,8 +1,8 @@
 #ifndef APP_CRAWIOT_MEDIATOR_H
 #define APP_CRAWIOT_MEDIATOR_H
 
-#include <freertos/FreeRTOS.h>
 #include "crawiot_location.h"
+#include <freertos/FreeRTOS.h>
 #include "freertos/queue.h"
 
 class Mediator {
