@@ -27,10 +27,8 @@ void crawiot_setup() {
             .FirstSpeedDegree = 45
     };
     GlobalTracer.setup();
-    GlobalLocationManager.current_location = {
-            .Y = 0,
-            .X = 0
-    };
+    GlobalLocationManager.current_location.X = 0;
+    GlobalLocationManager.current_location.Y = 0;
     
     NetworkModule.setup(config);
     MotionModule.setup(config);

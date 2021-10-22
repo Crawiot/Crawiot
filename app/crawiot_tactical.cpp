@@ -39,10 +39,11 @@ void Tactical::reach_current_target() {
     message.concat(this->current_target.Y);
     GlobalTracer.send_trace(message);
     
-    const int diff = calculate_diff(this->current_target.X, GlobalLocationManager.current_location.X);
+    const int diff = calculate_diff(GlobalLocationManager.current_location.X, this->current_target.X);
     if (diff > 0) {
         GlobalTracer.send_trace("Tactical. Moving forward");
         MotionModule.execute(MoveForward);
+        vTaskDelay(pdMS_TO_TICKS(100));
     } else {
         this->has_current_target = false;
         this->need_stop = true;

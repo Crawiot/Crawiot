@@ -23,14 +23,19 @@
 void Strategic::reach_coordinates(const Coordinates coordinates) {
     const int current_x = GlobalLocationManager.current_location.X;
 
-    const int diff = calculate_diff(coordinates.X, current_x);
+    const int diff = calculate_diff(current_x, coordinates.X);
 
     if (diff < 0) {
-        GlobalTracer.send_trace("Strategic. Can't reach the target");
+        String message = "Strategic. Can't reach the target: ";
+        message.concat(coordinates.X);
+        message.concat(". Current X: ");
+        message.concat(current_x);
+        GlobalTracer.send_trace(message);
         return;
     }
 
     for (int sub_target_x = current_x; calculate_diff(sub_target_x, coordinates.X) >= 1;) {
+        
         const Coordinates sub_target = {
                 .X = sub_target_x,
                 .Y = GlobalLocationManager.current_location.Y
@@ -41,5 +46,6 @@ void Strategic::reach_coordinates(const Coordinates coordinates) {
             sub_target_x += 1;
         }
     }
-    GlobalTracer.send_trace("Strategic. Diff is less than 1");
+    
+    GlobalTracer.send_trace("Strategic. All sub targets were pushed");
 }
