@@ -16,3 +16,7 @@ void Tracer::setup() {
 void Tracer::light_default_led() {
     digitalWrite(LED_BUILTIN, HIGH);
 }
+
+String Tracer::get_traces() {
+    return this->log.get_combined_trace();
+}
