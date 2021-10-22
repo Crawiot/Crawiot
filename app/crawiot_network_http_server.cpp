@@ -7,36 +7,48 @@
 
 WebServer webServer(80);
 
+void handlePostTargetRequest();
+void handleGetTracesRequest();
+
 bool Network::start_http_server() {
 
     webServer.on(("/"), []() {
         webServer.send(200, "text/html", CrawiotIndexPage);
     });
 
-    webServer.on("/api/target", HTTP_POST, []() {
-        const int x = webServer.arg("X").toInt();
-        const int y = webServer.arg("Y").toInt();
-        const Coordinates coordinates = {
-                .X = x,
-                .Y = y
-        };
-        
-        const bool wasPushed = ModulesMediator.push_target(coordinates);
-        String locationHeaderValue = "/?X=";
-        locationHeaderValue.concat(x);
-        
-        locationHeaderValue.concat("&Y=");
-        locationHeaderValue.concat(y);
+    webServer.on("/api/target", HTTP_POST, handlePostTargetRequest);
 
-        locationHeaderValue.concat("&success=");
-        locationHeaderValue.concat(wasPushed ? "true" : "false");
-        
-        webServer.sendHeader("location", locationHeaderValue);
-        webServer.send(302);
-    });
+    webServer.on("/api/traces", handleGetTracesRequest);
 
 
     webServer.begin();
     GlobalTracer.send_trace("HTTP server started");
     return true;
+}
+
+void handlePostTargetRequest() {
+    const int x = webServer.arg("X").toInt();
+    const int y = webServer.arg("Y").toInt();
+    const Coordinates coordinates = {
+            .X = x,
+            .Y = y
+    };
+    GlobalTracer.send_trace("Before push");
+    const bool wasPushed = ModulesMediator.push_target(coordinates);
+    GlobalTracer.send_trace("After push");
+    String locationHeaderValue = "/?X=";
+    locationHeaderValue.concat(x);
+
+    locationHeaderValue.concat("&Y=");
+    locationHeaderValue.concat(y);
+
+    locationHeaderValue.concat("&success=");
+    locationHeaderValue.concat(wasPushed ? "true" : "false");
+
+    webServer.sendHeader("location", locationHeaderValue);
+    webServer.send(302);
+}
+
+void handleGetTracesRequest() {
+    webServer.send(200, "text/plain",GlobalTracer.get_traces());
 }
