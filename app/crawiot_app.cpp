@@ -37,15 +37,15 @@ void crawiot_setup() {
 
     xTaskCreatePinnedToCore([](void *) {
         NetworkModule.task();
-    }, "NetworkModule", 1024 * 3, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
+    }, "NetworkModule", 1024 * 3, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
 
     xTaskCreatePinnedToCore([](void *) {
         StrategicModule.task();
-    }, "StrategicModule", 1024, NULL, 2, NULL, ARDUINO_RUNNING_CORE);
+    }, "StrategicModule", 1024, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
 
     xTaskCreatePinnedToCore([](void *) {
         TacticalModule.task();
-    }, "TacticalModule", 1024, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
+    }, "TacticalModule", 1024, NULL, 2, NULL, ARDUINO_RUNNING_CORE);
 }
 
 void crawiot_loop() {
