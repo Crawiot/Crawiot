@@ -1,5 +1,5 @@
 #include "crawiot_common.h"
 
-int calculate_diff(int current, int target) {
+float calculate_diff(float current, float target) {
     return target - current;
 }
