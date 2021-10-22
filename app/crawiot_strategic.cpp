@@ -1,6 +1,7 @@
-#include "crawiot_strategic.h"
 #include "crawiot_traces.h"
 #include "crawiot_mediator.h"
+#include "crawiot_strategic.h"
+#include "crawiot_common.h"
 #include <freertos/task.h>
 #include <cmath>
 
@@ -22,7 +23,7 @@
 void Strategic::reach_coordinates(const Coordinates coordinates) {
     const int current_x = GlobalLocationManager.current_location.X;
 
-    float diff = calculate_diff(coordinates.X, current_x);
+    const int diff = calculate_diff(coordinates.X, current_x);
 
     if (diff < 0) {
         GlobalTracer.send_trace("Strategic. Can't reach the target");
