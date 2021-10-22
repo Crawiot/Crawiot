@@ -5,9 +5,7 @@
 
 class Strategic {
 public:
-    [[noreturn]] static void task(void *pvParameters);
-
-    void reach_target();
+    [[noreturn]] void task();
 private:
     void reach_coordinates(const Coordinates);
 };
