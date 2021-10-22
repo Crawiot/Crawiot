@@ -10,6 +10,7 @@ private:
     void reach_current_target();
     Coordinates current_target;
     bool has_current_target;
+    bool need_stop;
 };
 
 #endif //APP_CRAWIOT_TACTICAL_H
