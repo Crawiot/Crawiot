@@ -32,7 +32,13 @@ void Tactical::reach_current_target() {
         }
         return;
     }
-
+    
+    String message = "Tactical. Reaching ";
+    message.concat(this->current_target.X);
+    message.concat(", ");
+    message.concat(this->current_target.Y);
+    GlobalTracer.send_trace(message);
+    
     const int diff = calculate_diff(this->current_target.X, GlobalLocationManager.current_location.X);
     if (diff > 0) {
         GlobalTracer.send_trace("Tactical. Moving forward");
