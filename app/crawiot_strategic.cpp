@@ -21,9 +21,9 @@
 }
 
 void Strategic::reach_coordinates(const Coordinates coordinates) {
-    const int current_x = GlobalLocationManager.current_location.X;
+    const float current_x = GlobalLocationManager.current_location.X;
 
-    const int diff = calculate_diff(current_x, coordinates.X);
+    const float diff = calculate_diff(current_x, coordinates.X);
 
     if (diff < 0) {
         String message = "Strategic. Can't reach the target: ";
@@ -34,7 +34,7 @@ void Strategic::reach_coordinates(const Coordinates coordinates) {
         return;
     }
 
-    for (int sub_target_x = current_x; calculate_diff(sub_target_x, coordinates.X) >= 1;) {
+    for (float sub_target_x = current_x; calculate_diff(sub_target_x, coordinates.X) >= 1;) {
         
         const Coordinates sub_target = {
                 .X = sub_target_x,
