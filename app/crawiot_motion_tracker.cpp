@@ -13,7 +13,6 @@ void IRAM_ATTR isr() {
 };
 
 void Tracker::setup(const Config &config) {
-    this->wheelRadius = config.WheelRadius;
     pinMode(HALL_PIN_D4, INPUT);
     attachInterrupt(HALL_PIN_D4, isr, FALLING);
 
@@ -29,8 +28,7 @@ void Tracker::setup(const Config &config) {
                                       portMAX_DELAY) == pdTRUE;
 
         if (received) {
-            const float val = (int) 2 * 3.1415 * this->wheelRadius;
-            GlobalLocationManager.current_location.X += val;
+            GlobalLocationManager.current_location.X += 1;
             
             String message = "Motion. Current coordinate ";
             message.concat(GlobalLocationManager.current_location.X);

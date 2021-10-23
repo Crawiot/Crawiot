@@ -10,8 +10,6 @@ public:
     void setup(const Config&);
 
     [[noreturn]] void task();
-private:
-    int wheelRadius;
 };
 
 #endif //APP_CRAWIOT_MOTION_TRACKER_H
