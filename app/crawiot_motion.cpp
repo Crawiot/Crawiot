@@ -11,6 +11,8 @@ void Motion::setup(const Config &config) {
     
     this->firstSpeedDegree = config.FirstSpeedDegree;
     this->servo.attach(SERVO_PIN_D13);
+    this->stopRotate();
+    
 }
 
 void Motion::task() {
@@ -23,14 +25,21 @@ void Motion::execute(MotionEngineCommand command) {
             startRotate(this->firstSpeedDegree);
             break;
         case Stop:
-            this->servo.write(0);
+            this->stopRotate();
             break;
     }
 }
 
 void Motion::startRotate(int degree) {
-    for (int posDegrees = 0; posDegrees <= degree; posDegrees++) {
-        this->servo.write(posDegrees);
-        delay(40); //Скорость вращения если что поменяем тут
+    if (this->currentDegree == degree){
+        return;
     }
+    
+    this->servo.write(degree);
+    this->currentDegree = degree;
+}
+
+void Motion::stopRotate(){
+    this->servo.write(0);
+    this->currentDegree = 0;
 }

@@ -2,7 +2,7 @@
 #define CRAWIOT_CIRCULARBUFFER_H
 
 #include <Arduino.h>
-#define TRACES_BUFFER_LENGTH 20
+#define TRACES_BUFFER_LENGTH 60
 
 class CircularBuffer {
 public:

@@ -25,7 +25,8 @@
 
 void Tactical::reach_current_target() {
     if (!this->has_current_target) {
-        if (this->need_stop) {
+        //if (this->need_stop)
+        {
             GlobalTracer.send_trace("Tactical. Stop");
             MotionModule.execute(Stop);
             this->need_stop = false;

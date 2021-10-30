@@ -20,6 +20,8 @@ private:
     int firstSpeedDegree;
     Tracker tracker;
     void startRotate(int degree);
+    int currentDegree;
+    void stopRotate();
 };
 
 extern Motion MotionModule;
