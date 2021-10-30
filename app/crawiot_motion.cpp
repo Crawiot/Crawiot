@@ -10,7 +10,8 @@ void Motion::setup(const Config &config) {
     this->tracker.setup(config);
     
     this->firstSpeedDegree = config.FirstSpeedDegree;
-    this->servo.attach(SERVO_PIN_D13);
+    pinMode(SERVO_PIN_D13, OUTPUT);
+    //this->servo.attach(SERVO_PIN_D13);
     this->stopRotate();
     
 }
@@ -34,12 +35,14 @@ void Motion::startRotate(int degree) {
     if (this->currentDegree == degree){
         return;
     }
-    
-    this->servo.write(degree);
+
+    digitalWrite(SERVO_PIN_D13, HIGH);
+    //this->servo.write(degree);
     this->currentDegree = degree;
 }
 
 void Motion::stopRotate(){
-    this->servo.write(0);
+    digitalWrite(SERVO_PIN_D13, LOW);
+//    this->servo.write(0);
     this->currentDegree = 0;
 }
