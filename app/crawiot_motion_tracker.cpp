@@ -3,7 +3,7 @@
 #include "crawiot_location.h"
 #include "crawiot_traces.h"
 
-static const int HALL_PIN_D4 = 4;
+static const int HALL_PIN_D15 = 15;
 
 static const bool TRUE = true; 
 volatile xQueueHandle location_updates;
@@ -13,8 +13,8 @@ void IRAM_ATTR isr() {
 };
 
 void Tracker::setup(const Config &config) {
-    pinMode(HALL_PIN_D4, INPUT);
-    attachInterrupt(HALL_PIN_D4, isr, FALLING);
+    pinMode(HALL_PIN_D15, INPUT);
+    attachInterrupt(HALL_PIN_D15, isr, FALLING);
 
     location_updates = xQueueCreate(2, sizeof(bool));
 }

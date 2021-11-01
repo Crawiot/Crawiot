@@ -40,6 +40,6 @@ void Motion::startRotate(int degree) {
 }
 
 void Motion::stopRotate(){
-    this->servo.write(0);
-    this->currentDegree = 0;
+    this->servo.write(90);
+    this->currentDegree = 90;
 }
