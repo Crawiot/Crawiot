@@ -1,5 +1,5 @@
-from car_api import post_target
+import car_api
 
 
 def handle_post_target(x: int, y: int) -> bool:
-    return post_target(x, y)
+    return car_api.post_target(x, y)
