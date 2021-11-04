@@ -1,6 +1,6 @@
 from flask import Flask, render_template, Response, request
-from car_api import get_traces, post_target
 from strategic import handle_post_target
+import car_api
 
 app = Flask(__name__)
 
@@ -24,7 +24,7 @@ def target():
 
 @app.route('/api/traces')
 def traces():
-    traces_text = get_traces()
+    traces_text = car_api.get_traces()
     return Response(traces_text, mimetype='text/plain')
 
 
