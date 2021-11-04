@@ -237,3 +237,5 @@ logs/
 *.orig
 cmake-build-debug
 app/CMakeLists.txt
+
+__pycache__

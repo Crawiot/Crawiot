@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Crawiot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css"
+          integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+</head>
+<body>
+<header class="header">
+    <h1>Crawiot</h1>
+    <h2>Control panel</h2>
+</header>
+<div class="content">
+    {% if success is defined %}
+        <section class="content-section">
+            <div id="statusMessage" class="message {{ 'success' if success else 'error' }}">
+                {% if success %}
+                    Device accepted the target
+                {% else %}
+                    Target was not accepted
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
+    <section class="content-section">
+        <form action="/api/target" class="pure-form" method="post">
+            <fieldset class="controls-wrapper">
+                <div class="pure-control-group">
+                    <label for="X">X</label>
+                    <input required type="number" name="X" id="X"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="Y">Y</label>
+                    <input required type="number" name="Y" id="Y"/>
+                </div>
+                <div class="pure-control-group">
+                    <button type="submit" class="pure-button pure-button-primary">
+                        Submit
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </section>
+    <section class="content-section">
+        <div class="controls-wrapper">
+            <a class="link" href="/api/traces" target="_blank">Link to traces</a>
+        </div>
+    </section>
+</div>
+<style>
+    html {
+        font-family: sans-serif;
+        line-height: 1.15;
+    }
+
+    body {
+        color: #777;
+        margin: 0;
+    }
+
+    .content {
+        margin: 10px auto;
+        padding: 0 2em;
+        line-height: 1.6em;
+    }
+
+    .header {
+        margin: 0 2em;
+        color: #333;
+        text-align: center;
+        padding: 2.5em 2em 0 2em;
+    }
+
+    .header h1 {
+        margin: 0.2em 0;
+        font-size: 2em;
+        font-weight: 300;
+    }
+    .header h2 {
+        font-weight: 300;
+        font-size: 1.5em;
+        color: #ccc;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    .controls-wrapper {
+        width: max-content;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-top: 1em !important;
+    }
+    
+    .pure-button {
+        float: right;
+    }
+
+    .message {
+        border-radius: 4px;
+        padding: 1em;
+        width: 15%;
+        margin: 1em auto;
+        text-align: center;
+    }
+
+    .pure-control-group {
+        margin-bottom: 0.5em;
+    }
+
+    .pure-control-group label {
+        text-align: right;
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 1em 0 0;
+    }
+
+    @media only screen and (max-width: 480px) {
+        .message {
+            width: 70%;
+        }
+    }
+
+    .success {
+        background: #5aba59;
+        color: #fff;
+    }
+
+    .error {
+        background: #df2d4f;
+        color: #fff;
+    }
+
+    .content-section {
+        border-top: 1px solid #eee;
+    }
+</style>
+<script>
+  const messageElement = document.getElementById("statusMessage");
+  const xInput = document.getElementById("X");
+  const yInput = document.getElementById("Y");
+  const urlParams = new URLSearchParams(window.location.search);
+
+  handleInputs();
+
+  function handleInputs() {
+    xInput.addEventListener("input", () => {
+      changeMessageVisibility(false);
+    });
+
+    yInput.addEventListener("input", () => {
+      changeMessageVisibility(false);
+    });
+
+    const xVal = urlParams.get("X");
+    const yVal = urlParams.get("Y");
+    if (xVal != null && !isNaN(Number(xVal))) {
+      xInput.value = xVal;
+    }
+    if (yVal != null && !isNaN(Number(yVal))) {
+      yInput.value = yVal;
+    }
+  }
+
+  function changeMessageVisibility(visible) {
+    messageElement.parentElement.style.display = visible ? "" : "none";
+  }
+</script>
+</body>
+</html>
