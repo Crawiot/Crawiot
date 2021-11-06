@@ -9,10 +9,10 @@
 [[noreturn]] void Tactical::task() {
     while (1) {
         
-        bool was_pulled;
+        bool wasPulled;
         if (!this->hasCurrentTarget) {
-            was_pulled = ModulesMediator.pullSubTarget(&this->currentTarget);
-            this->hasCurrentTarget = was_pulled;
+            wasPulled = ModulesMediator.pullSubTarget(&this->currentTarget);
+            this->hasCurrentTarget = wasPulled;
         }
 
         this->reach_current_target();

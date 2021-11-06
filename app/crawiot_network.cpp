@@ -2,14 +2,14 @@
 #include "crawiot_traces.h"
 
 void Network::setup(const Config& config) {
-    this->deviceIp.fromString(config.DeviceIp);
+    this->deviceIp.fromString(config.deviceIp);
     
-    if (!this->enableWifi(config.HostName, config.WiFiPassword)) {
+    if (!this->enableWifi(config.hostName, config.wiFiPassword)) {
         GlobalTracer.sendTrace("Failed to enable Wi-Fi");
         return;
     }
 
-    if (!this->enableDns(config.HostName)){
+    if (!this->enableDns(config.hostName)){
         GlobalTracer.sendTrace("Failed to enable DNS");
     }
 
