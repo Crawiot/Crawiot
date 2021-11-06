@@ -49,7 +49,8 @@ void handlePostSubtargetsRequest() {
     }
 
     const SubtargetsContainer container = {
-            .subtargets = subtargets
+            .subtargets = subtargets,
+            .size = size
     };
 
     const bool wasPushed = ModulesMediator.push_subtargets(container);

@@ -7,6 +7,7 @@
 
 struct SubtargetsContainer {
     const Coordinates* subtargets;
+    size_t size;
 };
 
 class Mediator {
