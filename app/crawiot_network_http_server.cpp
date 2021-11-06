@@ -1,11 +1,9 @@
 #include "crawiot_network.h"
 #include "crawiot_traces.h"
-#include "crawiot_main_page.h"
 #include "HTTP_Method.h"
 #include "crawiot_location.h"
 #include "crawiot_mediator.h"
 #include "ArduinoJson.hpp"
-#include "ArduinoJson/Document/StaticJsonDocument.hpp"
 
 using namespace ARDUINOJSON_NAMESPACE;
 
@@ -17,35 +15,36 @@ void handlePostSubtargetsRequest();
 
 void handleGetTracesRequest();
 
-bool Network::start_http_server() {
+void clearDocAndBadRequest();
 
-    webServer.on(("/"), []() {
-        webServer.send(200, "text/html", CrawiotIndexPage);
-    });
+bool Network::startHttpServer() {
 
     webServer.on("/api/subtargets", HTTP_POST, handlePostSubtargetsRequest);
 
     webServer.on("/api/traces", handleGetTracesRequest);
 
-
     webServer.begin();
-    GlobalTracer.send_trace("HTTP server started");
+    GlobalTracer.SendTrace("HTTP server started");
     return true;
 }
 
 void handlePostSubtargetsRequest() {
     const auto body = webServer.arg("plain");
     deserializeJson(doc, body);
+
     const auto array = doc["subtargets"].as<ArduinoJson::JsonArray>();
+    if (array.isNull()) {
+        clearDocAndBadRequest();
+        return;
+    }
+
     const auto size = array.size();
-    Coordinates *subtargets = new Coordinates[size];
+    auto *subtargets = new Coordinates[size];
     for (size_t index = 0; index < size; index++) {
-        const auto x = array.getElement(index)["x"].as<float>();
-        const auto y = array.getElement(index)["y"].as<float>();
         subtargets[index] = {
-                .X = x,
-                .Y = y
-        };;
+                .X = array.getElement(index)["x"].as<float>(),
+                .Y = array.getElement(index)["y"].as<float>()
+        };
     }
 
     const SubtargetsContainer container = {
@@ -53,9 +52,9 @@ void handlePostSubtargetsRequest() {
             .size = size
     };
 
-    const bool wasPushed = ModulesMediator.push_subtargets(container);
-    doc.clear();
+    const bool wasPushed = ModulesMediator.PushSubtargets(container);
 
+    doc.clear();
     if (wasPushed) {
         webServer.send(200);
     } else {
@@ -63,6 +62,11 @@ void handlePostSubtargetsRequest() {
     }
 }
 
+void clearDocAndBadRequest() {
+    doc.clear();
+    webServer.send(400);
+}
+
 void handleGetTracesRequest() {
-    webServer.send(200, "text/plain", GlobalTracer.get_traces());
+    webServer.send(200, "text/plain", GlobalTracer.GetTraces());
 }
