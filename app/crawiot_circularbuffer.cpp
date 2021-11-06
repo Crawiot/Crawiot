@@ -19,7 +19,7 @@ void CircularBuffer::add(String message) {
     xSemaphoreGive(bufferSemaphore);
 }
 
-String CircularBuffer::get_combined_trace() {
+String CircularBuffer::getCombinedTrace() {
 
     if (!this->currentBufferSize) return String("There's no traces");
 

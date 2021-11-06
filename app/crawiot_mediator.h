@@ -14,13 +14,13 @@ class Mediator {
 public:
     void setup();
 
-    bool push_subtargets(const SubtargetsContainer &);
+    bool pushSubtargets(const SubtargetsContainer &);
 
-    bool pull_subtargets(SubtargetsContainer *);
+    bool pullSubtargets(SubtargetsContainer *);
 
-    bool push_sub_target(const Coordinates &);
+    bool pushSubTarget(const Coordinates &);
 
-    bool pull_sub_target(Coordinates *);
+    bool pullSubTarget(Coordinates *);
 
 private:
     xQueueHandle subtargets_lists_queue;

@@ -15,11 +15,11 @@ public:
     [[noreturn]] void task();
 
 private:
-    bool enable_wifi(const char *ssid, const char *passphrase);
+    bool enableWifi(const char *ssid, const char *passphrase);
 
-    bool enable_dns(const char *hostName);
+    bool enableDns(const char *hostName);
 
-    bool start_http_server();
+    bool startHttpServer();
 
     DNSServer dnsServer;
     

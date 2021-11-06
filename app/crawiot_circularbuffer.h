@@ -7,7 +7,7 @@
 class CircularBuffer {
 public:
     void add(String message);
-    String get_combined_trace();
+    String getCombinedTrace();
 
 private:
     int recordIndex = 0;

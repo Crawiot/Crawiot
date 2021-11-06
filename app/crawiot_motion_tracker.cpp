@@ -28,11 +28,11 @@ void Tracker::setup(const Config &config) {
                                       portMAX_DELAY) == pdTRUE;
 
         if (received) {
-            GlobalLocationManager.current_location.X += 1;
+            GlobalLocationManager.currentLocation.X += 1;
             
             String message = "Motion. Current coordinate ";
-            message.concat(GlobalLocationManager.current_location.X);
-            GlobalTracer.send_trace(message);
+            message.concat(GlobalLocationManager.currentLocation.X);
+            GlobalTracer.sendTrace(message);
         }
     }
 }

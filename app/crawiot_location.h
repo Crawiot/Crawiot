@@ -8,7 +8,7 @@ struct Coordinates {
 
 class LocationManager {
 public:
-    Coordinates current_location;
+    Coordinates currentLocation;
 };
 
 extern LocationManager GlobalLocationManager;

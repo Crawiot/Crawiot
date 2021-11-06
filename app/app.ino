@@ -1,9 +1,9 @@
 #include "crawiot_app.h"
 
 void setup() {
-    crawiot_setup();
+    crawiotSetup();
 }
 
 void loop() {
-    crawiot_loop();
+    crawiotLoop();
 }
