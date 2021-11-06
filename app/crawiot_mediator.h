@@ -23,8 +23,8 @@ public:
     bool pullSubTarget(Coordinates *);
 
 private:
-    xQueueHandle subtargets_lists_queue;
-    xQueueHandle sub_targets_queue;
+    xQueueHandle subtargetsContainerQueue;
+    xQueueHandle subTargetsQueue;
 };
 
 extern Mediator ModulesMediator;
