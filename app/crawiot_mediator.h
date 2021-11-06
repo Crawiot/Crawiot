@@ -5,20 +5,24 @@
 #include <freertos/FreeRTOS.h>
 #include "freertos/queue.h"
 
+struct SubtargetsContainer {
+    const Coordinates* subtargets;
+};
+
 class Mediator {
 public:
     void setup();
 
-    bool push_target(const Coordinates&);
+    bool push_subtargets(const SubtargetsContainer &);
 
-    bool pull_target(Coordinates*);
+    bool pull_subtargets(SubtargetsContainer *);
 
-    bool push_sub_target(const Coordinates&);
+    bool push_sub_target(const Coordinates &);
 
-    bool pull_sub_target(Coordinates*);
+    bool pull_sub_target(Coordinates *);
 
 private:
-    xQueueHandle targets_queue;
+    xQueueHandle subtargets_lists_queue;
     xQueueHandle sub_targets_queue;
 };
 
