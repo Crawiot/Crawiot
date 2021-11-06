@@ -4,10 +4,17 @@
 #include "HTTP_Method.h"
 #include "crawiot_location.h"
 #include "crawiot_mediator.h"
+#include "ArduinoJson.hpp"
+#include "ArduinoJson/Document/StaticJsonDocument.hpp"
+
+using namespace ARDUINOJSON_NAMESPACE;
 
 WebServer webServer(80);
+StaticJsonDocument<1024> doc;
 
-void handlePostTargetRequest();
+
+void handlePostSubtargetsRequest();
+
 void handleGetTracesRequest();
 
 bool Network::start_http_server() {
@@ -16,7 +23,7 @@ bool Network::start_http_server() {
         webServer.send(200, "text/html", CrawiotIndexPage);
     });
 
-    webServer.on("/api/target", HTTP_POST, handlePostTargetRequest);
+    webServer.on("/api/subtargets", HTTP_POST, handlePostSubtargetsRequest);
 
     webServer.on("/api/traces", handleGetTracesRequest);
 
@@ -26,29 +33,35 @@ bool Network::start_http_server() {
     return true;
 }
 
-void handlePostTargetRequest() {
-    const int x = webServer.arg("X").toInt();
-    const int y = webServer.arg("Y").toInt();
-    const Coordinates coordinates = {
-            .X = x,
-            .Y = y
+void handlePostSubtargetsRequest() {
+    const auto body = webServer.arg("plain");
+    deserializeJson(doc, body);
+    const auto array = doc["subtargets"].as<ArduinoJson::JsonArray>();
+    const auto size = array.size();
+    Coordinates *subtargets = new Coordinates[size];
+    for (size_t index = 0; index < size; index++) {
+        const auto x = array.getElement(index)["x"].as<float>();
+        const auto y = array.getElement(index)["y"].as<float>();
+        subtargets[index] = {
+                .X = x,
+                .Y = y
+        };;
+    }
+
+    const SubtargetsContainer container = {
+            .subtargets = subtargets
     };
-    GlobalTracer.send_trace("Before push");
-    const bool wasPushed = ModulesMediator.push_target(coordinates);
-    GlobalTracer.send_trace("After push");
-    String locationHeaderValue = "/?X=";
-    locationHeaderValue.concat(x);
 
-    locationHeaderValue.concat("&Y=");
-    locationHeaderValue.concat(y);
+    const bool wasPushed = ModulesMediator.push_subtargets(container);
+    doc.clear();
 
-    locationHeaderValue.concat("&success=");
-    locationHeaderValue.concat(wasPushed ? "true" : "false");
-
-    webServer.sendHeader("location", locationHeaderValue);
-    webServer.send(302);
+    if (wasPushed) {
+        webServer.send(200);
+    } else {
+        webServer.send(500);
+    }
 }
 
 void handleGetTracesRequest() {
-    webServer.send(200, "text/plain",GlobalTracer.get_traces());
+    webServer.send(200, "text/plain", GlobalTracer.get_traces());
 }
