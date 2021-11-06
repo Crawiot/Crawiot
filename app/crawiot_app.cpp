@@ -21,10 +21,10 @@ Network NetworkModule = Network();
 void crawiotSetup() {
 
     const Config config = {
-            .WiFiPassword = "12345678",
-            .HostName = "crawiot.lan",
-            .DeviceIp = "192.168.4.1",
-            .FirstSpeedDegree = 170,
+            .wiFiPassword = "12345678",
+            .hostName = "crawiot.lan",
+            .deviceIp = "192.168.4.1",
+            .firstSpeedDegree = 170,
     };
     GlobalTracer.setup();
     GlobalLocationManager.currentLocation.X = 0;

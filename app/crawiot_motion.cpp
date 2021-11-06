@@ -9,7 +9,7 @@ static const int SERVO_PIN_D13 = 13;
 void Motion::setup(const Config &config) {
     this->tracker.setup(config);
     
-    this->firstSpeedDegree = config.FirstSpeedDegree;
+    this->firstSpeedDegree = config.firstSpeedDegree;
     this->servo.attach(SERVO_PIN_D13);
     this->stopRotate();
     

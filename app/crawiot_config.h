@@ -2,10 +2,10 @@
 #define APP_CRAWIOT_CONFIG_H
 
 struct Config {
-    const char* WiFiPassword;
-    const char* HostName;
-    const char* DeviceIp;
-    const int FirstSpeedDegree;
+    const char* wiFiPassword;
+    const char* hostName;
+    const char* deviceIp;
+    const int firstSpeedDegree;
 };
 
 #endif //APP_CRAWIOT_CONFIG_H
