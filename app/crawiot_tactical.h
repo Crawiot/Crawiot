@@ -8,9 +8,9 @@ public:
     [[noreturn]] void task();
 private:
     void reach_current_target();
-    Coordinates current_target;
-    bool has_current_target;
-    bool need_stop;
+    Coordinates currentTarget;
+    bool hasCurrentTarget;
+    bool needStop;
 };
 
 #endif //APP_CRAWIOT_TACTICAL_H

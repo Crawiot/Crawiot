@@ -4,21 +4,21 @@
 void Network::setup(const Config& config) {
     this->deviceIp.fromString(config.DeviceIp);
     
-    if (!this->enable_wifi(config.HostName, config.WiFiPassword)) {
-        GlobalTracer.send_trace("Failed to enable Wi-Fi");
+    if (!this->enableWifi(config.HostName, config.WiFiPassword)) {
+        GlobalTracer.sendTrace("Failed to enable Wi-Fi");
         return;
     }
 
-    if (!this->enable_dns(config.HostName)){
-        GlobalTracer.send_trace("Failed to enable DNS");
+    if (!this->enableDns(config.HostName)){
+        GlobalTracer.sendTrace("Failed to enable DNS");
     }
 
-    if (!this->start_http_server()) {
-        GlobalTracer.send_trace("Failed to start http server");
+    if (!this->startHttpServer()) {
+        GlobalTracer.sendTrace("Failed to start http server");
         return;
     }
 
-    GlobalTracer.send_trace("Network module initialized");
+    GlobalTracer.sendTrace("Network module initialized");
 }
 
 [[noreturn]] void Network::task() {

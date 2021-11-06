@@ -24,7 +24,7 @@ bool Network::startHttpServer() {
     webServer.on("/api/traces", handleGetTracesRequest);
 
     webServer.begin();
-    GlobalTracer.SendTrace("HTTP server started");
+    GlobalTracer.sendTrace("HTTP server started");
     return true;
 }
 
@@ -52,7 +52,7 @@ void handlePostSubtargetsRequest() {
             .size = size
     };
 
-    const bool wasPushed = ModulesMediator.PushSubtargets(container);
+    const bool wasPushed = ModulesMediator.pushSubtargets(container);
 
     doc.clear();
     if (wasPushed) {
@@ -68,5 +68,5 @@ void clearDocAndBadRequest() {
 }
 
 void handleGetTracesRequest() {
-    webServer.send(200, "text/plain", GlobalTracer.GetTraces());
+    webServer.send(200, "text/plain", GlobalTracer.getTraces());
 }

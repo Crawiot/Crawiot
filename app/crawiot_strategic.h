@@ -8,7 +8,7 @@ class Strategic {
 public:
     [[noreturn]] void task();
 private:
-    void process_subtargets(const SubtargetsContainer);
+    void processSubtargets(const SubtargetsContainer);
 };
 
 #endif //APP_CRAWIOT_STRATEGIC_H

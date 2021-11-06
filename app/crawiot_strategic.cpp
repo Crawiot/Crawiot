@@ -9,38 +9,38 @@
     while (1) {
 
         SubtargetsContainer container;
-        const bool was_pulled = ModulesMediator.pull_subtargets(&container);
+        const bool wasPulled = ModulesMediator.pullSubtargets(&container);
 
-        if (was_pulled) {
-            GlobalTracer.send_trace("Strategic. Target acquired");
-            this->process_subtargets(container);
+        if (wasPulled) {
+            GlobalTracer.sendTrace("Strategic. Target acquired");
+            this->processSubtargets(container);
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 
-void Strategic::process_subtargets(const SubtargetsContainer container) {
-    const float current_x = GlobalLocationManager.current_location.X;
-    const float first_x = container.subtargets[0].X;
+void Strategic::processSubtargets(const SubtargetsContainer container) {
+    const float currentX = GlobalLocationManager.currentLocation.X;
+    const float firstX = container.subtargets[0].X;
 
-    const float diff = calculate_diff(current_x, first_x);
+    const float diff = calculateDiff(currentX, firstX);
     if (diff < 0) {
         String message = "Strategic. Can't reach the target: ";
-        message.concat(first_x);
+        message.concat(firstX);
         message.concat(". Current X: ");
-        message.concat(current_x);
-        GlobalTracer.send_trace(message);
+        message.concat(currentX);
+        GlobalTracer.sendTrace(message);
         return;
     }
 
     for (size_t index = 0; index < container.size;) {
-        const bool was_pushed = ModulesMediator.push_sub_target(container.subtargets[index]);
-        if (was_pushed) {
+        const bool wasPushed = ModulesMediator.pushSubTarget(container.subtargets[index]);
+        if (wasPushed) {
             index += 1;
         }
     }
 
     delete[] container.subtargets;
-    GlobalTracer.send_trace("Strategic. All sub targets were pushed");
+    GlobalTracer.sendTrace("Strategic. All sub targets were pushed");
 }

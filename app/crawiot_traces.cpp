@@ -2,7 +2,7 @@
 
 Tracer GlobalTracer = Tracer();
 
-void Tracer::send_trace(String message) {
+void Tracer::sendTrace(String message) {
     this->log.add(message);
     Serial.println(message);
 }
@@ -13,10 +13,10 @@ void Tracer::setup() {
     delay(1000);
 }
 
-void Tracer::light_default_led() {
+void Tracer::lightDefaultLed() {
     digitalWrite(LED_BUILTIN, HIGH);
 }
 
-String Tracer::get_traces() {
-    return this->log.get_combined_trace();
+String Tracer::getTraces() {
+    return this->log.getCombinedTrace();
 }

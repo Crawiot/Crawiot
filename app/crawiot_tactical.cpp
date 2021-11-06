@@ -10,43 +10,43 @@
     while (1) {
         
         bool was_pulled;
-        if (!this->has_current_target) {
-            was_pulled = ModulesMediator.pull_sub_target(&this->current_target);
-            this->has_current_target = was_pulled;
+        if (!this->hasCurrentTarget) {
+            was_pulled = ModulesMediator.pullSubTarget(&this->currentTarget);
+            this->hasCurrentTarget = was_pulled;
         }
 
         this->reach_current_target();
 
-        if (!this->has_current_target && !this->need_stop){
+        if (!this->hasCurrentTarget && !this->needStop){
             vTaskDelay(pdMS_TO_TICKS(500));
         }
     }
 }
 
 void Tactical::reach_current_target() {
-    if (!this->has_current_target) {
-        //if (this->need_stop)
+    if (!this->hasCurrentTarget) {
+        //if (this->needStop)
         {
-            GlobalTracer.send_trace("Tactical. Stop");
+            GlobalTracer.sendTrace("Tactical. Stop");
             MotionModule.execute(Stop);
-            this->need_stop = false;
+            this->needStop = false;
         }
         return;
     }
     
     String message = "Tactical. Reaching ";
-    message.concat(this->current_target.X);
+    message.concat(this->currentTarget.X);
     message.concat(", ");
-    message.concat(this->current_target.Y);
-    GlobalTracer.send_trace(message);
+    message.concat(this->currentTarget.Y);
+    GlobalTracer.sendTrace(message);
     
-    const float diff = calculate_diff(GlobalLocationManager.current_location.X, this->current_target.X);
+    const float diff = calculateDiff(GlobalLocationManager.currentLocation.X, this->currentTarget.X);
     if (diff > 0) {
-        GlobalTracer.send_trace("Tactical. Moving forward");
+        GlobalTracer.sendTrace("Tactical. Moving forward");
         MotionModule.execute(MoveForward);
         vTaskDelay(pdMS_TO_TICKS(100));
     } else {
-        this->has_current_target = false;
-        this->need_stop = true;
+        this->hasCurrentTarget = false;
+        this->needStop = true;
     }
 }

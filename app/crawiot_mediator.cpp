@@ -7,7 +7,7 @@ void Mediator::setup() {
     this->subtargets_lists_queue = xQueueCreate(3, sizeof(SubtargetsContainer));
 }
 
-bool Mediator::push_sub_target(const Coordinates &coordinates) {
+bool Mediator::pushSubTarget(const Coordinates &coordinates) {
     return xQueueSend(
                    this->sub_targets_queue,
                    &coordinates,
@@ -15,14 +15,14 @@ bool Mediator::push_sub_target(const Coordinates &coordinates) {
            ) == pdPASS;
 }
 
-bool Mediator::pull_sub_target(Coordinates *coordinates) {
+bool Mediator::pullSubTarget(Coordinates *coordinates) {
     return xQueueReceive(this->sub_targets_queue, coordinates, 0) == pdTRUE;
 }
 
-bool Mediator::push_subtargets(const SubtargetsContainer &subtargetsContainer) {
+bool Mediator::pushSubtargets(const SubtargetsContainer &subtargetsContainer) {
     return xQueueSend(this->subtargets_lists_queue, &subtargetsContainer, 0) == pdPASS;
 }
 
-bool Mediator::pull_subtargets(SubtargetsContainer *subtargetsContainer) {
+bool Mediator::pullSubtargets(SubtargetsContainer *subtargetsContainer) {
     return xQueueReceive(this->subtargets_lists_queue, subtargetsContainer, 0) == pdTRUE;
 }
