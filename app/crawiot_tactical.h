@@ -11,6 +11,7 @@ private:
     Coordinates currentTarget;
     bool hasCurrentTarget;
     bool needStop;
+    float currentAngle;
 };
 
 #endif //APP_CRAWIOT_TACTICAL_H
