@@ -8,6 +8,8 @@
 enum MotionEngineCommand {
     Stop,
     MoveForward,
+    Right,
+    Left,
 };
 
 class Motion {
