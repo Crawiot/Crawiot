@@ -3,6 +3,7 @@
 #include "crawiot_motion.h"
 #include "crawiot_traces.h"
 #include "crawiot_common.h"
+#include "math.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -30,50 +31,47 @@ void Tactical::makeRotation() {
     const auto targetY = this->currentTarget.Y;
     const float diffY = calculateDiff(currentY, targetY);
 
-    //todo 
-    if (diffY == 0) {
-        return;
+    const auto currentX = GlobalLocationManager.currentLocation.X;
+    const auto targetX = this->currentTarget.X;
+    const float diffX = calculateDiff(currentX, targetX);
+
+    const float currentAngle = GlobalLocationManager.currentAngle;
+    const float targetAngle;
+
+    if(diffX == 0) {
+        targetAngle = (diffY > 0) ? M_PI/2 : -1 * M_PI/2;
+    } else if(diffY == 0) {
+        targetAngle = diffX > 0 ? 0 : M_PI;
+    } else if(diffX > 0) {
+        targetAngle = (diffY > 0) ? atan(diffY / diffX) : -1 * atan(diffY / diffX);
     } else {
-        const auto currentX = GlobalLocationManager.currentLocation.X;
-        const auto targetX = this->currentTarget.X;
-        const float diffX = calculateDiff(currentX, targetX);
-        const float currentAngle = GlobalLocationManager.currentAngle;
-        const float targetAngle = abs(tan(diffY / diffX));
+        targetAngle = (diffY > 0) ? M_PI - atan(diffY / diffX) : -1 * M_PI + atan(diffY / diffX);
+    }
+    targetAngle = targetAngle * 180 / M_PI; //Radian to degree
+    }
 
-        if (targetAngle != currentAngle) {
-            const auto angleDiff = abs(targetAngle - currentAngle);
-            auto commandsToExecuteCount = ceil(angleDiff / 13);
+    if (targetAngle != currentAngle) {
+        const auto angleDiff = abs(targetAngle - currentAngle);
+        auto commandsToExecuteCount = ceil(angleDiff / 13);
 
-            GlobalLocationManager.disableUpdates = true;
-            MotionModule.execute(Stop);
+        GlobalLocationManager.disableUpdates = true;
+        MotionModule.execute(Stop);
 
-            const auto direction = targetAngle > currentAngle ? Left : Right;
-            for (int i = 0; i < commandsToExecuteCount; i++) {
-                MotionModule.execute(direction);
-            }
-            GlobalLocationManager.disableUpdates = false;
-            GlobalLocationManager.currentAngle = targetAngle;
+        const auto direction = targetAngle > currentAngle ? Left : Right;
+        for (int i = 0; i < commandsToExecuteCount; i++) {
+            MotionModule.execute(direction);
         }
+        GlobalLocationManager.disableUpdates = false;
+        GlobalLocationManager.currentAngle = targetAngle;
     }
 }
 
 void Tactical::reach_current_target() {
-    if (!this->hasCurrentTarget) {
-        //if (this->needStop)
-        {
-            GlobalTracer.sendTrace("Tactical. Stop");
-            MotionModule.execute(Stop);
-            this->needStop = false;
-        }
-        return;
-    }
-
     String message = "Tactical. Reaching ";
     message.concat(this->currentTarget.X);
     message.concat(", ");
     message.concat(this->currentTarget.Y);
     GlobalTracer.sendTrace(message);
-
 
     float startPosition = GlobalLocationManager.currentSegmentPosition;
     float x_0 = GlobalLocationManager.currentLocation.X;
@@ -88,8 +86,11 @@ void Tactical::reach_current_target() {
         vTaskDelay(pdMS_TO_TICKS(100));
         diff = GlobalLocationManager.currentSegmentPosition - startPosition;
     }
+    MotionModule.execute(Stop);
 
-    GlobalLocationManager.currentSegmentPosition = 0;
-    this->hasCurrentTarget = false;
-    this->needStop = true;
+    String message = "Tactical. Stop at ";
+    message.concat(this->currentTarget.X);
+    message.concat(", ");
+    message.concat(this->currentTarget.Y);
+    GlobalTracer.sendTrace(message);
 }

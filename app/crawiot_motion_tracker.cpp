@@ -35,6 +35,8 @@ void Tracker::setup(const Config &config) {
             
             String message = "Motion. Current coordinate ";
             message.concat(GlobalLocationManager.currentLocation.X);
+            message.concat(", ");
+            message.concat(GlobalLocationManager.currentLocation.Y);
             GlobalTracer.sendTrace(message);
         }
     }
