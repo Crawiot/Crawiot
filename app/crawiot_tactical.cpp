@@ -26,45 +26,35 @@
 
 
 void Tactical::makeRotation() {
-    //Получаем новые Х и У
-    const auto currentX = GlobalLocationManager.currentLocation.X;
     const auto currentY = GlobalLocationManager.currentLocation.Y;
-
-    const auto targetX = this->currentTarget.X;
     const auto targetY = this->currentTarget.Y;
-
-    const float diffX = calculateDiff(currentX, targetX);
     const float diffY = calculateDiff(currentY, targetY);
 
-    // Проверяем угол по У
+    //todo 
     if (diffY == 0) {
-        return
-    }
-    else {
-        float currentAngle = this->currentAngle;
-        float targetAngle = abs(tan(diffY/diffX));
-        number = ceil((targetAngle - currentAngle) / 13);
+        return;
+    } else {
+        const auto currentX = GlobalLocationManager.currentLocation.X;
+        const auto targetX = this->currentTarget.X;
+        const float diffX = calculateDiff(currentX, targetX);
+        const float currentAngle = GlobalLocationManager.currentAngle;
+        const float targetAngle = abs(tan(diffY / diffX));
+
         if (targetAngle != currentAngle) {
-            if (targetAngle > currentAngle) {
-                for (int i = 0; i < number; i++) {
-                    MotionModule.execute(Left);
-                }
-                
-            }
-            else {
-                for (int i = 0; i < number; i++) {
-                    MotionModule.execute(Right);
-                }
-            }
-            vTaskDelay(pdMS_TO_TICKS(1000));
+            const auto angleDiff = abs(targetAngle - currentAngle);
+            auto commandsToExecuteCount = ceil(angleDiff / 13);
+
             GlobalLocationManager.disableUpdates = true;
+            MotionModule.execute(Stop);
+
+            const auto direction = targetAngle > currentAngle ? Left : Right;
+            for (int i = 0; i < commandsToExecuteCount; i++) {
+                MotionModule.execute(direction);
+            }
+            GlobalLocationManager.disableUpdates = false;
+            GlobalLocationManager.currentAngle = targetAngle;
         }
-
     }
-    //Так ли сохраняется угол?
-    this->currentAngle = targetAngle;
-    return
-
 }
 
 void Tactical::reach_current_target() {
@@ -84,25 +74,22 @@ void Tactical::reach_current_target() {
     message.concat(this->currentTarget.Y);
     GlobalTracer.sendTrace(message);
 
-    //Высчитываем скок надо проехать прямо
-    const auto currentX = GlobalLocationManager.currentLocation.X;
-    const auto currentY = GlobalLocationManager.currentLocation.Y;
 
-    const auto targetX = this->currentTarget.X;
-    const auto targetY = this->currentTarget.Y;
-    
-    const float diffX = calculateDiff(currentX, targetX);
-    const float diffY = calculateDiff(currentY, targetY);
+    float startPosition = GlobalLocationManager.currentSegmentPosition;
+    float x_0 = GlobalLocationManager.currentLocation.X;
+    float y_0 = GlobalLocationManager.currentLocation.Y;
+    float x_1 = this->currentTarget.X;
+    float y_1 = this->currentTarget.Y;
+    float pathLength = sqrt((x_1 - x_0) * (x_1 - x_0) + (y_1 - y_0) * (y_1 - y_0));
 
-    const float diff = sqrt(diffX * diffX + diffY * diffY);
-    
-    if (diff > 0) {
-            GlobalLocationManager.disableUpdates = false;
-            MotionModule.execute(MoveForward);
-            vTaskDelay(pdMS_TO_TICKS(100));
-       
-    } else {
-        this->hasCurrentTarget = false;
-        this->needStop = true;
+    float diff = GlobalLocationManager.currentSegmentPosition - startPosition;
+    while (diff < pathLength) {
+        MotionModule.execute(MoveForward);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        diff = GlobalLocationManager.currentSegmentPosition - startPosition;
     }
+
+    GlobalLocationManager.currentSegmentPosition = 0;
+    this->hasCurrentTarget = false;
+    this->needStop = true;
 }
