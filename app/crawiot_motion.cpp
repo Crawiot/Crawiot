@@ -4,17 +4,16 @@
 
 Motion MotionModule;
 
-static const int SERVO_MOVE = 13;
-static const int SERVO_ROTATE = 12;
+static const int SERVO_MOVE_PIN = 13;
+static const int SERVO_ROTATE_PIN = 12;
 
 void Motion::setup(const Config &config) {
     this->tracker.setup(config);
     
     this->firstSpeedDegree = config.firstSpeedDegree;
-    this->servo_move.attach(SERVO_MOVE);
-    this->servo_rotate.attach(SERVO_ROTATE);
-    this->stopRotate();
-    
+    this->servoMove.attach(SERVO_MOVE_PIN);
+    this->servoRotate.attach(SERVO_ROTATE_PIN);
+    this->stop();
 }
 
 void Motion::task() {
@@ -24,66 +23,66 @@ void Motion::task() {
 void Motion::execute(MotionEngineCommand command) {
     switch (command) {
         case MoveForward:
-            startRotate(this->firstSpeedDegree);
+            moveTo(this->firstSpeedDegree);
             break;
         case Stop:
-            this->stopRotate();
+            this->stop();
             break;
         case Right:
-            this->RotateThirteenToRight();
+            this->rotateToRight();
             break;
         case Left:
-            this->RotateFifteenToLeft();
+            this->rotateToLeft();
             break;
     }
 }
 
-void Motion::startRotate(int degree) {
+void Motion::moveTo(int degree) {
     if (this->currentDegree == degree){
         return;
     }
     
-    this->servo.write(degree);
+    this->servoMove.write(degree);
     this->currentDegree = degree;
 }
 
-void Motion::stopRotate(){
-    this->servo.write(90);
+void Motion::stop(){
+    this->servoMove.write(90);
     this->currentDegree = 90;
 }
 
-void Motion::RotateThirteenToRight() {
+void Motion::rotateToRight() {
     for (int i = 0; i < 2; i++) {
-        servo_rotate.write(65);
+        this->servoRotate.write(65);
         delay(300);
-        servo_move.write(110);
+        servoMove.write(110);
         delay(500);
-        servo_move.write(90);
+        servoMove.write(90);
         delay(300);
-        servo_rotate.write(105);
+        this->servoRotate.write(105);
         delay(300);
-        servo_move.write(70);
+        servoMove.write(70);
         delay(500);
-        servo_rotate.write(85);
-        servo_move.write(90);
+        this->servoRotate.write(85);
+        servoMove.write(90);
         delay(300);
     }
 }
 
-void Motion::RotateFifteenToLeft() {
+void Motion::rotateToLeft() {
     for (int i = 0; i < 2; i++) {
-        servo_rotate.write(105);
+        this->servoRotate.write(105);
         delay(300);
-        servo_move.write(110);
+        servoMove.write(110);
         delay(500);
-        servo_move.write(90);
+        servoMove.write(90);
         delay(300);
-        servo_rotate.write(65);
+        this->servoRotate.write(65);
         delay(300);
-        servo_move.write(70);
+        servoMove.write(70);
         delay(500);
-        servo_rotate.write(85);
-        servo_move.write(90);
+        this->servoRotate.write(85);
+        servoMove.write(90);
         delay(300);
     }
 }

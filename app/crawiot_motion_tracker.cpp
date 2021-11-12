@@ -30,10 +30,13 @@ void Tracker::setup(const Config &config) {
         if (received && !GlobalLocationManager.disableUpdates) {
             GlobalLocationManager.currentLocation.X += cos(GlobalLocationManager.currentAngle);
             GlobalLocationManager.currentLocation.Y += sin(GlobalLocationManager.currentAngle);
+            GlobalLocationManager.currentSegmentPosition +=1;
             
             
             String message = "Motion. Current coordinate ";
             message.concat(GlobalLocationManager.currentLocation.X);
+            message.concat(", ");
+            message.concat(GlobalLocationManager.currentLocation.Y);
             GlobalTracer.sendTrace(message);
         }
     }

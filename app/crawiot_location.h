@@ -9,6 +9,7 @@ struct Coordinates {
 class LocationManager {
 public:
     Coordinates currentLocation;
+    float currentSegmentPosition;
     bool disableUpdates;
     float currentAngle;
 };
