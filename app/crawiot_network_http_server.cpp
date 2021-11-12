@@ -5,7 +5,7 @@
 #include "crawiot_mediator.h"
 #include "ArduinoJson.hpp"
 
-using namespace ARDUINOJSON_NAMESPACE;
+ARDUINOJSON_NAMESPACE::StaticJsonDocument<1024> doc;
 
 WebServer webServer(80);
 void handlePostSubtargetsRequest();
@@ -67,10 +67,8 @@ void handleGetTracesRequest() {
 }
 
 void handleGetLocationRequest() {
-    const int X = GlobalLocationManager.currentLocation.X; 
-    const int Y = GlobalLocationManager.currentLocation.Y;
-    StaticJsonDocument<64> doc;
-    JsonObject jsonDoc = doc.to<JsonObject>();
+    ARDUINOJSON_NAMESPACE::StaticJsonDocument<64> bodyDoc;
+    auto jsonDoc = bodyDoc.to<ArduinoJson::JsonObject>();
     jsonDoc["X"] = GlobalLocationManager.currentLocation.X;
     jsonDoc["Y"] = GlobalLocationManager.currentLocation.Y; 
     String body = "";
