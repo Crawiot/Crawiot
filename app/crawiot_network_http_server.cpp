@@ -70,3 +70,19 @@ void clearDocAndBadRequest() {
 void handleGetTracesRequest() {
     webServer.send(200, "text/plain", GlobalTracer.getTraces());
 }
+
+void handleGetLocationRequest() {
+    //1) Взять локацию из GLM
+    const int X = GlobalLocationManager.currentLocation.X; 
+    const int Y = GlobalLocationManager.currentLocation.Y;
+    //2) ArduinoJSON создать объект с ХУ, синхронз с GLM
+    const size_t CAPACITY = JSON_OBJECT_SIZE(1);
+    StaticJsonDocument<CAPACITY> doc;
+    JsonObject jsonDoc = doc.to<JsonObject>();
+    jsonDoc["X"] = GlobalLocationManager.currentLocation.X;
+    jsonDoc["Y"] = GlobalLocationManager.currentLocation.Y;
+    //3) 
+    string body = "";
+    serializeJson(jsonDoc, body);
+    webServer.send(200, "application/json", body);
+}
