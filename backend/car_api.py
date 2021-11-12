@@ -1,22 +1,26 @@
 import requests
 import json
+from coordinates import Coordinates
+
+BASE = 'http://crawiot.lan'
 
 
 def post_target(subtargets_list) -> bool:
     data = {'subtargets': subtargets_list}
-    headers = {'Content-Type': 'application/json'}
-    r = requests.post("http://crawiot.lan/api/subtargets", data=json.dumps(data), headers=headers)
-    return r.status_code == 200
+    resp = requests.post(f'{BASE}/api/subtargets',
+                         data=json.dumps(data),
+                         headers={'Content-Type': 'application/json'}
+                         )
+    return resp.status_code == 200
 
 
 def get_traces() -> str:
-    trace = requests.get("http://crawiot.lan/api/traces")
+    trace = requests.get(f'{BASE}/api/traces')
     return trace.text
 
 
-def get_location() -> tuple:
-    location = requests.get("http://crawiot.lan/api/location")
+def get_location() -> Coordinates:
+    location = requests.get(f'{BASE}/api/location')
     location.json()
     parsed_string = json.loads(location.json())
-    coordinates = (parsed_string["x"], parsed_string["y"])
-    return coordinates
+    return Coordinates(parsed_string["x"], parsed_string["y"])
