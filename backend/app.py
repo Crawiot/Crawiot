@@ -1,4 +1,5 @@
 from flask import Flask, render_template, Response, request
+
 from strategic import handle_post_target
 import car_api
 
@@ -7,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return index_page(None)
 
 
 @app.route('/api/target', methods=['POST'])
@@ -19,7 +20,12 @@ def target():
         return Response("Invalid body", status=400)
 
     success = handle_post_target(x, y)
-    return render_template('index.html', success=success)
+    return index_page(success=success)
+
+
+def index_page(success):
+    current_location = car_api.get_location()
+    return render_template('index.html', success=success, current_location=current_location)
 
 
 @app.route('/api/traces')
