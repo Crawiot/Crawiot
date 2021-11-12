@@ -106,5 +106,5 @@ def get_path(start_pos: Tuple[float], end_pos: Tuple[float], barriers: List[Tupl
             graph[mappa[nodes[j]]].append(mappa[nodes[i]])
 
     path = bfs(graph, len(nodes), mappa[start_pos], mappa[end_pos])
-    path = list(map(lambda x: mappa[x], path))
+    path = list(map(lambda x: mappa[x].coordinates, path))
     return path
