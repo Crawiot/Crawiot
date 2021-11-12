@@ -4,7 +4,6 @@ from queue import Queue
 import sympy.geometry as geoma
 import itertools as itool
 
-
 from coordinates import Coordinates
 
 
@@ -38,8 +37,7 @@ def bfs(graph, n, s, t):
         return path[::-1]
 
 
-def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[Tuple[float]]],
-             borders: List[Tuple[Tuple[float]]]) -> List[Coordinates]:
+def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[Coordinates]]) -> List[Coordinates]:
     rays = []
 
     def add_rays(source_point: geoma.Point2D, *dirs):
@@ -58,7 +56,12 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
     add_rays(geoma.Point2D(end_pos.x, end_pos.y), (1, 1), (-1, -1))
 
     segments = []
-    for x1, y1, x2, y2 in itool.chain(barriers, borders):
+    for item in barriers:
+        x1 = item[0].x
+        y1 = item[0].y
+        x2 = item[1].x
+        y2 = item[1].y
+
         if x1 > x2:
             x1, x2 = x2, x1
         if y1 > y2:
@@ -74,9 +77,6 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
         segments.append(geoma.Segment2D(pt4, pt2))
         segments.append(geoma.Segment2D(pt3, pt1))
         segments.append(geoma.Segment2D(pt2, pt1))
-
-        if (x1, y1, x2, y2) in borders:
-            continue
 
         for pt, dir in zip([pt1, pt2, pt3, pt4], [(-1, -1), (-1, 1), (1, -1), (1, 1)]):
             add_rays(pt, dir)

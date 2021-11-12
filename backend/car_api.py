@@ -5,7 +5,7 @@ from coordinates import Coordinates
 BASE = 'http://crawiot.lan'
 
 
-def post_target(subtargets_list) -> bool:
+def post_subtargets(subtargets_list) -> bool:
     data = {'subtargets': subtargets_list}
     resp = requests.post(f'{BASE}/api/subtargets',
                          data=json.dumps(data),

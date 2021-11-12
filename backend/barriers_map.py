@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import json
 
@@ -7,13 +7,20 @@ from coordinates import Coordinates
 
 def get_barriers_map(json_file):
     data = json.load(json_file)
+
+    def to_barriers_tuples(barrier) -> Tuple:
+        result = ()
+        for point in barrier:
+            result += (Coordinates(point['x'], point['y']),)
+        return result
+
     barriers = list(map(
-        lambda barrier: Coordinates(barrier['x'], barrier['y']),
+        to_barriers_tuples,
         data['barriers']
     ))
     return BarriersMap(barriers)
 
 
 class BarriersMap:
-    def __init__(self, barriers: List[Coordinates]):
+    def __init__(self, barriers: List[Tuple[Coordinates]]):
         self.barriers = barriers
