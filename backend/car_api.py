@@ -8,7 +8,7 @@ BASE = 'http://crawiot.lan'
 def post_subtargets(subtargets_list) -> bool:
     data = {'subtargets': subtargets_list}
     resp = requests.post(f'{BASE}/api/subtargets',
-                         data=json.dumps(data),
+                         data=json.dumps(data, default=vars),
                          headers={'Content-Type': 'application/json'}
                          )
     return resp.status_code == 200
@@ -21,6 +21,5 @@ def get_traces() -> str:
 
 def get_location() -> Coordinates:
     location = requests.get(f'{BASE}/api/location')
-    location.json()
-    parsed_string = json.loads(location.json())
-    return Coordinates(parsed_string["x"], parsed_string["y"])
+    parsed_string = location.json()
+    return Coordinates(parsed_string["X"], parsed_string["Y"])

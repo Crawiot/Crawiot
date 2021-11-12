@@ -16,10 +16,10 @@
             this->hasCurrentTarget = wasPulled;
         }
 
-        this->makeRotation();
-        this->reach_current_target();
-
-        if (!this->hasCurrentTarget && !this->needStop) {
+        if (this->hasCurrentTarget) {
+            this->makeRotation();
+            this->reach_current_target();
+        } else {
             vTaskDelay(pdMS_TO_TICKS(500));
         }
     }
@@ -27,6 +27,7 @@
 
 
 void Tactical::makeRotation() {
+    GlobalTracer.sendTrace("Tactical. makeRotation");
     const auto currentY = GlobalLocationManager.currentLocation.Y;
     const auto targetY = this->currentTarget.Y;
     const float diffY = calculateDiff(currentY, targetY);
@@ -38,11 +39,11 @@ void Tactical::makeRotation() {
     const float currentAngle = GlobalLocationManager.currentAngle;
     float targetAngle;
 
-    if(diffX == 0) {
-        targetAngle = (diffY > 0) ? M_PI/2 : -1 * M_PI/2;
-    } else if(diffY == 0) {
+    if (diffX == 0) {
+        targetAngle = (diffY > 0) ? M_PI / 2 : -1 * M_PI / 2;
+    } else if (diffY == 0) {
         targetAngle = diffX > 0 ? 0 : M_PI;
-    } else if(diffX > 0) {
+    } else if (diffX > 0) {
         targetAngle = (diffY > 0) ? atan(diffY / diffX) : -1 * atan(diffY / diffX);
     } else {
         targetAngle = (diffY > 0) ? M_PI - atan(diffY / diffX) : -1 * M_PI + atan(diffY / diffX);
@@ -86,6 +87,9 @@ void Tactical::reach_current_target() {
         diff = GlobalLocationManager.currentSegmentPosition - startPosition;
     }
     MotionModule.execute(Stop);
+
+    this->hasCurrentTarget = false;
+    this->needStop = true;
 
     message = "Tactical. Stop at ";
     message.concat(this->currentTarget.X);
