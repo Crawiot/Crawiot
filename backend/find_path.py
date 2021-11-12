@@ -4,7 +4,7 @@ from queue import Queue
 import sympy.geometry as geoma
 import itertools as itool
 
-
+# source: https://e-maxx.ru/algo/bfs
 def bfs(graph, n, s, t):
     q = Queue(maxlen=100000)
     q.put(s)
