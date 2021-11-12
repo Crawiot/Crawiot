@@ -34,7 +34,7 @@ void handlePostSubtargetsRequest() {
     }
 
     const auto size = array.size();
-    auto *subtargets = new Coordinates[size];
+    auto* subtargets = new Coordinates[size];
     for (size_t index = 0; index < size; index++) {
         subtargets[index] = {
                 .X = array.getElement(index)["x"].as<float>(),
@@ -52,7 +52,8 @@ void handlePostSubtargetsRequest() {
     doc.clear();
     if (wasPushed) {
         webServer.send(200);
-    } else {
+    }
+    else {
         webServer.send(500);
     }
 }
@@ -70,7 +71,7 @@ void handleGetLocationRequest() {
     ARDUINOJSON_NAMESPACE::StaticJsonDocument<64> bodyDoc;
     auto jsonDoc = bodyDoc.to<ArduinoJson::JsonObject>();
     jsonDoc["X"] = GlobalLocationManager.currentLocation.X;
-    jsonDoc["Y"] = GlobalLocationManager.currentLocation.Y; 
+    jsonDoc["Y"] = GlobalLocationManager.currentLocation.Y;
     String body = "";
     serializeJson(jsonDoc, body);
     webServer.send(200, "application/json", body);

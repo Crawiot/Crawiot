@@ -8,6 +8,8 @@
 enum MotionEngineCommand {
     Stop,
     MoveForward,
+    Right,
+    Left,
 };
 
 class Motion {
@@ -16,12 +18,18 @@ public:
     void execute(MotionEngineCommand);
     void task();
 private:
-    Servo servo;
+    Servo servoMove;
     int firstSpeedDegree;
     Tracker tracker;
-    void startRotate(int degree);
+    void moveTo(int degree);
     int currentDegree;
-    void stopRotate();
+    void stop();
+
+    void rotateToRight();
+
+    Servo servoRotate;
+
+    void rotateToLeft();
 };
 
 extern Motion MotionModule;

@@ -11,6 +11,8 @@ private:
     Coordinates currentTarget;
     bool hasCurrentTarget;
     bool needStop;
+
+    void makeRotation();
 };
 
 #endif //APP_CRAWIOT_TACTICAL_H
