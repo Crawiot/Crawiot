@@ -37,7 +37,8 @@ def bfs(graph, n, s, t):
         return path[::-1]
 
 
-def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[Coordinates]]) -> List[Coordinates]:
+def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[Coordinates]],
+             borders: List[Tuple[Coordinates]]) -> List[Coordinates]:
     rays = []
 
     def add_rays(source_point: geoma.Point2D, *dirs):
@@ -56,7 +57,7 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
     add_rays(geoma.Point2D(end_pos.x, end_pos.y), (1, 1), (-1, -1))
 
     segments = []
-    for item in barriers:
+    for item in itool.chain(barriers, borders):
         x1 = item[0].x
         y1 = item[0].y
         x2 = item[1].x
@@ -78,17 +79,22 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
         segments.append(geoma.Segment2D(pt3, pt1))
         segments.append(geoma.Segment2D(pt2, pt1))
 
+        if item in borders:
+            continue
+
         for pt, dir in zip([pt1, pt2, pt3, pt4], [(-1, -1), (-1, 1), (1, -1), (1, 1)]):
             add_rays(pt, dir)
 
-    nodes = [start_pos, end_pos]
+    start_point = start_pos.to_point()
+    end_point = end_pos.to_point()
+    nodes = [start_point, end_point]
 
     def intersections(ray: Union[geoma.Ray2D, geoma.Segment2D], nodes=None):
         pts = []
         for seg in segments:
             if len(seg.intersection(ray)) == 0:
                 continue
-            pts.append(seg.intersection(ray))
+            pts.append(seg.intersection(ray)[0])
         if len(pts) < 2:
             return 0
         if nodes:
@@ -96,11 +102,11 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
             for pt in pts:
                 if ray.p1.distance(pt) < ray.p1.distance(minv):
                     minv = pt
-            nodes.append(geoma.Segment2D(minv, ray.p1).midpoint)
+            nodes.append(minv.midpoint(ray.p1))
         return len(pts)
 
     for ray in rays:
-        intersections(ray)
+        intersections(ray, nodes)
 
     pt_to_index = dict()
     for i in range(len(nodes)):
@@ -109,12 +115,12 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
     graph = [[] for i in range(len(nodes))]
     for i in range(len(nodes)):
         for j in range(i):
-            seg = geoma.Segment2D(nodes[i].to_point(), nodes[j].to_point())
+            seg = geoma.Segment2D(nodes[i], nodes[j])
             if intersections(seg) != 0:
                 continue
             graph[pt_to_index[nodes[i]]].append(pt_to_index[nodes[j]])
             graph[pt_to_index[nodes[j]]].append(pt_to_index[nodes[i]])
 
-    path = bfs(graph, len(nodes), pt_to_index[start_pos], pt_to_index[end_pos])
+    path = bfs(graph, len(nodes), pt_to_index[start_point], pt_to_index[end_point])
     path = list(map(lambda x: pt_to_index[x].coordinates, path))
     return path

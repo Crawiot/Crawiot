@@ -6,7 +6,8 @@ from coordinates import Coordinates
 
 
 def get_barriers_map(json_file):
-    data = json.load(json_file)
+    with open(json_file) as file:
+        data = json.load(file)
 
     def to_barriers_tuples(barrier) -> Tuple:
         result = ()
