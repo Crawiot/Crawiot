@@ -1,17 +1,18 @@
-from typing import List
 import requests
 import json
 
-def post_target(list) -> bool:
 
-    data = {'subtargets': list}
-    headers = {'Content-type': 'application/json'}
+def post_target(subtargets_list) -> bool:
+    data = {'subtargets': subtargets_list}
+    headers = {'Content-Type': 'application/json'}
     r = requests.post("http://crawiot.lan/api/subtargets", data=json.dumps(data), headers=headers)
-    return True
+    return r.status_code == 200
+
 
 def get_traces() -> str:
     trace = requests.get("http://crawiot.lan/api/traces")
-    return trace.text()
+    return trace.text
+
 
 def get_location() -> tuple:
     location = requests.get("http://crawiot.lan/api/location")
