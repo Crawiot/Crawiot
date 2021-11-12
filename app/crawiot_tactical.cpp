@@ -36,7 +36,7 @@ void Tactical::makeRotation() {
     const float diffX = calculateDiff(currentX, targetX);
 
     const float currentAngle = GlobalLocationManager.currentAngle;
-    const float targetAngle;
+    float targetAngle;
 
     if(diffX == 0) {
         targetAngle = (diffY > 0) ? M_PI/2 : -1 * M_PI/2;
@@ -48,7 +48,6 @@ void Tactical::makeRotation() {
         targetAngle = (diffY > 0) ? M_PI - atan(diffY / diffX) : -1 * M_PI + atan(diffY / diffX);
     }
     targetAngle = targetAngle * 180 / M_PI; //Radian to degree
-    }
 
     if (targetAngle != currentAngle) {
         const auto angleDiff = abs(targetAngle - currentAngle);
@@ -88,7 +87,7 @@ void Tactical::reach_current_target() {
     }
     MotionModule.execute(Stop);
 
-    String message = "Tactical. Stop at ";
+    message = "Tactical. Stop at ";
     message.concat(this->currentTarget.X);
     message.concat(", ");
     message.concat(this->currentTarget.Y);
