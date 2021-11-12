@@ -8,21 +8,16 @@
 using namespace ARDUINOJSON_NAMESPACE;
 
 WebServer webServer(80);
-StaticJsonDocument<1024> doc;
-
-
 void handlePostSubtargetsRequest();
-
 void handleGetTracesRequest();
-
+void handleGetLocationRequest();
 void clearDocAndBadRequest();
 
 bool Network::startHttpServer() {
 
     webServer.on("/api/subtargets", HTTP_POST, handlePostSubtargetsRequest);
-
     webServer.on("/api/traces", handleGetTracesRequest);
-
+    webServer.on("/api/location", handleGetLocationRequest);
     webServer.begin();
     GlobalTracer.sendTrace("HTTP server started");
     return true;
@@ -69,4 +64,16 @@ void clearDocAndBadRequest() {
 
 void handleGetTracesRequest() {
     webServer.send(200, "text/plain", GlobalTracer.getTraces());
+}
+
+void handleGetLocationRequest() {
+    const int X = GlobalLocationManager.currentLocation.X; 
+    const int Y = GlobalLocationManager.currentLocation.Y;
+    StaticJsonDocument<64> doc;
+    JsonObject jsonDoc = doc.to<JsonObject>();
+    jsonDoc["X"] = GlobalLocationManager.currentLocation.X;
+    jsonDoc["Y"] = GlobalLocationManager.currentLocation.Y; 
+    String body = "";
+    serializeJson(jsonDoc, body);
+    webServer.send(200, "application/json", body);
 }
