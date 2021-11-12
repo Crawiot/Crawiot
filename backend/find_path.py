@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from queue import Queue
 
 import sympy.geometry as geoma
@@ -40,10 +40,12 @@ def get_path(start_pos: Tuple[float], end_pos: Tuple[float], barriers: List[Tupl
     def add_rays(source_point: geoma.Point2D, *dirs):
         for dir in dirs:
             rays.append(
-                source_point,
-                geoma.Point2D(
-                    source_point.coordinates[0] + dir[0],
-                    source_point.coordinates[1] + dir[1]
+                geoma.Ray2D(
+                    source_point,
+                    geoma.Point2D(
+                        source_point.coordinates[0] + dir[0],
+                        source_point.coordinates[1] + dir[1]
+                    )
                 )
             )
     add_rays(start_pos, (1, 1), (-1, -1))
@@ -56,6 +58,7 @@ def get_path(start_pos: Tuple[float], end_pos: Tuple[float], barriers: List[Tupl
         if y1 > y2:
             y1, y2 = y2, y1
         
+        # 'pt' == 'Point'
         pt4 = geoma.Point(x1, y1) # (-1, -1)
         pt3 = geoma.Point(x1, y2) # (-1, 1)
         pt2 = geoma.Point(x2, y1) # (1, -1)
@@ -73,7 +76,7 @@ def get_path(start_pos: Tuple[float], end_pos: Tuple[float], barriers: List[Tupl
             add_rays(pt, dir)
 
     nodes = [start_pos, end_pos]
-    def intersections(ray: geoma.Ray2D, is_void=False):
+    def intersections(ray: Union[geoma.Ray2D, geoma.Segment2D], nodes=None):
         pts = []
         for seg in segments:
             if len(seg.intersection(ray)) == 0:
@@ -81,7 +84,7 @@ def get_path(start_pos: Tuple[float], end_pos: Tuple[float], barriers: List[Tupl
             pts.append(seg.intersection(ray))
         if len(pts) < 2:
                 return 0
-        if not is_void and isinstance(ray, geoma.Ray2D):
+        if nodes:
             minv = pts[0]
             for pt in pts:
                 if ray.p1.distance(pt) < ray.p1.distance(minv):
@@ -92,9 +95,9 @@ def get_path(start_pos: Tuple[float], end_pos: Tuple[float], barriers: List[Tupl
     for ray in rays:
         intersections(ray)
 
-    mappa = dict()
+    pt_to_index = dict()
     for i in range(len(nodes)):
-        mappa[nodes[i]] = i
+        pt_to_index[nodes[i]] = i
 
     graph = [[] for i in range(len(nodes))]
     for i in range(len(nodes)):
@@ -102,9 +105,9 @@ def get_path(start_pos: Tuple[float], end_pos: Tuple[float], barriers: List[Tupl
             seg = geoma.Segment2D(nodes[i], nodes[j])
             if intersections(seg, is_void=True) != 0:
                 continue
-            graph[mappa[nodes[i]]].append(mappa[nodes[j]])
-            graph[mappa[nodes[j]]].append(mappa[nodes[i]])
+            graph[pt_to_index[nodes[i]]].append(pt_to_index[nodes[j]])
+            graph[pt_to_index[nodes[j]]].append(pt_to_index[nodes[i]])
 
-    path = bfs(graph, len(nodes), mappa[start_pos], mappa[end_pos])
-    path = list(map(lambda x: mappa[x].coordinates, path))
+    path = bfs(graph, len(nodes), pt_to_index[start_pos], pt_to_index[end_pos])
+    path = list(map(lambda x: pt_to_index[x].coordinates, path))
     return path
