@@ -48,6 +48,8 @@ void Tactical::makeRotation() {
     } else {
         targetAngle = (diffY > 0) ? M_PI - atan(diffY / diffX) : -1 * M_PI + atan(diffY / diffX);
     }
+    
+    targetAngle = abs(targetAngle);
 
     if (targetAngle != currentAngle) {
         const auto angleDiff = abs(targetAngle - currentAngle);
@@ -57,8 +59,17 @@ void Tactical::makeRotation() {
         MotionModule.execute(Stop);
 
         const auto direction = targetAngle > currentAngle ? Left : Right;
+        String msg = direction == Left ? "Tactical. Left " : "Tactical. Right ";
+        msg.concat(commandsToExecuteCount);
+        msg.concat(". ");
+        msg.concat(angleDiff);
+        GlobalTracer.sendTrace(msg);
+        String innerMsg = "Tactical. Rotation command ";
         for (int i = 0; i < commandsToExecuteCount; i++) {
             MotionModule.execute(direction);
+            innerMsg.remove(27, 10);
+            innerMsg.concat(i);
+            GlobalTracer.sendTrace(innerMsg);
         }
         String angleMessage = "Tactical. Target angle ";
         angleMessage.concat(targetAngle);

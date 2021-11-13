@@ -14,6 +14,7 @@ void Motion::setup(const Config &config) {
     this->servoMove.attach(SERVO_MOVE_PIN);
     this->servoRotate.attach(SERVO_ROTATE_PIN);
     this->stop();
+    this->servoRotate.write(85);
 }
 
 void Motion::task() {

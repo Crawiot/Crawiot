@@ -29,6 +29,7 @@ void crawiotSetup() {
     GlobalTracer.setup();
     GlobalLocationManager.currentLocation.X = 0;
     GlobalLocationManager.currentLocation.Y = 0;
+    GlobalLocationManager.currentAngle = 0;
     
     NetworkModule.setup(config);
     MotionModule.setup(config);

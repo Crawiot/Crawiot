@@ -28,8 +28,10 @@ void Tracker::setup(const Config &config) {
                                       portMAX_DELAY) == pdTRUE;
 
         if (received && !GlobalLocationManager.disableUpdates) {
-            GlobalLocationManager.currentLocation.X += abs(cos(GlobalLocationManager.currentAngle));
-            GlobalLocationManager.currentLocation.Y += abs(sin(GlobalLocationManager.currentAngle));
+            const auto cos_val = cos(GlobalLocationManager.currentAngle);
+            const auto sin_val = sin(GlobalLocationManager.currentAngle);
+            GlobalLocationManager.currentLocation.X += abs(cos_val);
+            GlobalLocationManager.currentLocation.Y += abs(sin_val);
             GlobalLocationManager.currentSegmentPosition +=1;
             
             
