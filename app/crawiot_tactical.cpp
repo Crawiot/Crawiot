@@ -48,11 +48,10 @@ void Tactical::makeRotation() {
     } else {
         targetAngle = (diffY > 0) ? M_PI - atan(diffY / diffX) : -1 * M_PI + atan(diffY / diffX);
     }
-    targetAngle = targetAngle * 180 / M_PI; //Radian to degree
 
     if (targetAngle != currentAngle) {
         const auto angleDiff = abs(targetAngle - currentAngle);
-        auto commandsToExecuteCount = ceil(angleDiff / 13);
+        auto commandsToExecuteCount = ceil(angleDiff / 0.22);
 
         GlobalLocationManager.disableUpdates = true;
         MotionModule.execute(Stop);
@@ -61,6 +60,9 @@ void Tactical::makeRotation() {
         for (int i = 0; i < commandsToExecuteCount; i++) {
             MotionModule.execute(direction);
         }
+        String angleMessage = "Tactical. Target angle ";
+        angleMessage.concat(targetAngle);
+        GlobalTracer.sendTrace(angleMessage);
         GlobalLocationManager.disableUpdates = false;
         GlobalLocationManager.currentAngle = targetAngle;
     }
