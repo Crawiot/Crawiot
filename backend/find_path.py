@@ -4,11 +4,15 @@ from queue import Queue
 import sympy.geometry as geoma
 import itertools as itool
 
+from sympy.geometry.line import Segment2D
+from sympy.geometry.point import Point2D
+
 from coordinates import Coordinates
 
 
 # source: https://e-maxx.ru/algo/bfs
 def bfs(graph, n, s, t):
+
     q = Queue(maxsize=100000)
     q.put(s)
     used = [False for _ in range(n)]
@@ -19,8 +23,7 @@ def bfs(graph, n, s, t):
     to = None
     while not q.empty():
         v = q.get()
-        for i in range(len(graph[v])):
-            to = graph[v][i]
+        for to in graph[v]:
             if not used[to]:
                 used[to] = True
                 q.put(to)
@@ -48,15 +51,26 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
                     source_point,
                     geoma.Point2D(
                         source_point.coordinates[0] + dir[0],
+                        source_point.coordinates[1]
+                    )
+                )
+            )
+            rays.append(
+                geoma.Ray2D(
+                    source_point,
+                    geoma.Point2D(
+                        source_point.coordinates[0],
                         source_point.coordinates[1] + dir[1]
                     )
                 )
             )
-
+    print('On add_rays stage')
     add_rays(geoma.Point2D(start_pos.x, start_pos.y), (1, 1), (-1, -1))
     add_rays(geoma.Point2D(end_pos.x, end_pos.y), (1, 1), (-1, -1))
 
     segments = []
+    
+    print('On generating segments and points stage')
     for item in itool.chain(barriers, borders):
         x1 = item[0].x
         y1 = item[0].y
@@ -82,21 +96,28 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
         if item in borders:
             continue
 
-        for pt, dir in zip([pt1, pt2, pt3, pt4], [(-1, -1), (-1, 1), (1, -1), (1, 1)]):
+        for pt, dir in zip([pt4, pt3, pt2, pt1], [(-1, -1), (-1, 1), (1, -1), (1, 1)]):
             add_rays(pt, dir)
-
+    for i in rays:
+        print(i)
     start_point = start_pos.to_point()
     end_point = end_pos.to_point()
     nodes = [start_point, end_point]
 
     def intersections(ray: Union[geoma.Ray2D, geoma.Segment2D], nodes=None):
         pts = []
+
         for seg in segments:
             if len(seg.intersection(ray)) == 0:
                 continue
-            pts.append(seg.intersection(ray)[0])
+            result = seg.intersection(ray)[0]
+            if isinstance(result, geoma.Segment2D):
+                result = result.p1 if result.p1.distance(ray.p1) < result.p2.distance(ray.p1) else result.p2
+            if result == ray.p1:
+                continue
+            pts.append(result)
         if len(pts) < 2:
-            return 0
+            return len(pts)
         if nodes:
             minv = pts[0]
             for pt in pts:
@@ -105,14 +126,19 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
             nodes.append(minv.midpoint(ray.p1))
         return len(pts)
 
+    print('On intersection stage')
     for ray in rays:
         intersections(ray, nodes)
+    nodes = list(set(nodes))
+    print(nodes)
 
+    print('On transform stage')
     pt_to_index = dict()
     for i in range(len(nodes)):
         pt_to_index[nodes[i]] = i
 
     graph = [[] for i in range(len(nodes))]
+    print('On graph generating stage')
     for i in range(len(nodes)):
         for j in range(i):
             seg = geoma.Segment2D(nodes[i], nodes[j])
@@ -121,6 +147,7 @@ def get_path(start_pos: Coordinates, end_pos: Coordinates, barriers: List[Tuple[
             graph[pt_to_index[nodes[i]]].append(pt_to_index[nodes[j]])
             graph[pt_to_index[nodes[j]]].append(pt_to_index[nodes[i]])
 
+    print('On bfs stage')
     path = bfs(graph, len(nodes), pt_to_index[start_point], pt_to_index[end_point])
-    path = list(map(lambda x: pt_to_index[x].coordinates, path))
+    path = list(map(lambda x: nodes[x].coordinates, path))
     return path
