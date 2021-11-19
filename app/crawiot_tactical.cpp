@@ -39,7 +39,9 @@ void Tactical::makeRotation() {
     const float currentAngle = GlobalLocationManager.currentAngle;
     float targetAngle;
 
-    if (diffX == 0) {
+    if (diffX == 0 && diffY == 0) {
+        targetAngle = currentAngle;
+    } else if (diffX == 0) {
         targetAngle = (diffY > 0) ? M_PI / 2 : -1 * M_PI / 2;
     } else if (diffY == 0) {
         targetAngle = diffX > 0 ? 0 : M_PI;
@@ -53,27 +55,15 @@ void Tactical::makeRotation() {
 
     if (targetAngle != currentAngle) {
         const auto angleDiff = abs(targetAngle - currentAngle);
-        auto commandsToExecuteCount = ceil(angleDiff / 0.22);
+        auto commandsToExecuteCount = ceil(angleDiff / 0.2261);
 
         GlobalLocationManager.disableUpdates = true;
         MotionModule.execute(Stop);
 
         const auto direction = targetAngle > currentAngle ? Left : Right;
-        String msg = direction == Left ? "Tactical. Left " : "Tactical. Right ";
-        msg.concat(commandsToExecuteCount);
-        msg.concat(". ");
-        msg.concat(angleDiff);
-        GlobalTracer.sendTrace(msg);
-        String innerMsg = "Tactical. Rotation command ";
         for (int i = 0; i < commandsToExecuteCount; i++) {
             MotionModule.execute(direction);
-            innerMsg.remove(27, 10);
-            innerMsg.concat(i);
-            GlobalTracer.sendTrace(innerMsg);
         }
-        String angleMessage = "Tactical. Target angle ";
-        angleMessage.concat(targetAngle);
-        GlobalTracer.sendTrace(angleMessage);
         GlobalLocationManager.disableUpdates = false;
         GlobalLocationManager.currentAngle = targetAngle;
     }
