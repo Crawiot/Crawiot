@@ -19,6 +19,7 @@ public:
     void task();
 private:
     Servo servoMove;
+    Servo servoRotate;
     int firstSpeedDegree;
     Tracker tracker;
     void moveTo(int degree);
@@ -27,7 +28,6 @@ private:
 
     void rotateToRight();
 
-    Servo servoRotate;
 
     void rotateToLeft();
 };

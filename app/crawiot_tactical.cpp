@@ -50,17 +50,22 @@ void Tactical::makeRotation() {
     } else {
         targetAngle = (diffY > 0) ? M_PI - atan(diffY / diffX) : -1 * M_PI + atan(diffY / diffX);
     }
-    
-    targetAngle = abs(targetAngle);
 
+    String angleMsg = "Tactical. TargetAngle ";
+    angleMsg.concat(targetAngle);
+    GlobalTracer.sendTrace(angleMsg);
+    
     if (targetAngle != currentAngle) {
+        const auto direction = targetAngle > currentAngle ? Left : Right;
+        
         const auto angleDiff = abs(targetAngle - currentAngle);
-        auto commandsToExecuteCount = ceil(angleDiff / 0.2261);
+        auto commandsToExecuteCount = direction == Left 
+                ? ceil(angleDiff / 0.2261)
+                : floor(angleDiff / 0.2261);
 
         GlobalLocationManager.disableUpdates = true;
         MotionModule.execute(Stop);
 
-        const auto direction = targetAngle > currentAngle ? Left : Right;
         for (int i = 0; i < commandsToExecuteCount; i++) {
             MotionModule.execute(direction);
         }
@@ -83,11 +88,23 @@ void Tactical::reach_current_target() {
     float y_1 = this->currentTarget.Y;
     float pathLength = sqrt((x_1 - x_0) * (x_1 - x_0) + (y_1 - y_0) * (y_1 - y_0));
 
-    float diff = GlobalLocationManager.currentSegmentPosition - startPosition;
-    while (diff < pathLength) {
+    int counter = 0;
+    while (counter < pathLength) {
         MotionModule.execute(MoveForward);
-        vTaskDelay(pdMS_TO_TICKS(100));
-        diff = GlobalLocationManager.currentSegmentPosition - startPosition;
+        vTaskDelay(pdMS_TO_TICKS(500));
+        counter++;
+
+        const auto cos_val = cos(GlobalLocationManager.currentAngle);
+        const auto sin_val = sin(GlobalLocationManager.currentAngle);
+        GlobalLocationManager.currentLocation.X += cos_val;
+        GlobalLocationManager.currentLocation.Y += sin_val;
+        GlobalLocationManager.currentSegmentPosition += 1;
+
+        String message = "Motion. Current coordinate ";
+        message.concat(GlobalLocationManager.currentLocation.X);
+        message.concat(", ");
+        message.concat(GlobalLocationManager.currentLocation.Y);
+        GlobalTracer.sendTrace(message);
     }
     MotionModule.execute(Stop);
 

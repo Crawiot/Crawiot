@@ -9,4 +9,12 @@ def handle_post_target(x: int, y: int) -> bool:
     current_location = car_api.get_location()
     target = Coordinates(x, y)
     path = get_path(current_location, target, barriers.barriers)
+    path = [
+        Coordinates(6, 0),
+        Coordinates(6, 15),
+        Coordinates(0, 15),
+        Coordinates(6, 15),
+        Coordinates(6, 0),
+        Coordinates(0, 0),
+    ]
     return car_api.post_subtargets(path)

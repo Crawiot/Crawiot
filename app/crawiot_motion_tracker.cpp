@@ -13,33 +13,33 @@ void IRAM_ATTR isr() {
 };
 
 void Tracker::setup(const Config &config) {
-    pinMode(HALL_PIN_D15, INPUT);
-    attachInterrupt(HALL_PIN_D15, isr, FALLING);
-
-    location_updates = xQueueCreate(2, sizeof(bool));
+//    pinMode(HALL_PIN_D15, INPUT);
+//    attachInterrupt(HALL_PIN_D15, isr, FALLING);
+//
+//    location_updates = xQueueCreate(2, sizeof(bool));
 }
 
 [[noreturn]] void Tracker::task() {
     while (1) {
-        bool update;
-        const bool received = xQueueReceive(
-                                      location_updates,
-                                      &update,
-                                      portMAX_DELAY) == pdTRUE;
-
-        if (received && !GlobalLocationManager.disableUpdates) {
-            const auto cos_val = cos(GlobalLocationManager.currentAngle);
-            const auto sin_val = sin(GlobalLocationManager.currentAngle);
-            GlobalLocationManager.currentLocation.X += abs(cos_val);
-            GlobalLocationManager.currentLocation.Y += abs(sin_val);
-            GlobalLocationManager.currentSegmentPosition +=1;
-            
-            
-            String message = "Motion. Current coordinate ";
-            message.concat(GlobalLocationManager.currentLocation.X);
-            message.concat(", ");
-            message.concat(GlobalLocationManager.currentLocation.Y);
-            GlobalTracer.sendTrace(message);
-        }
+//        bool update;
+//        const bool received = xQueueReceive(
+//                                      location_updates,
+//                                      &update,
+//                                      portMAX_DELAY) == pdTRUE;
+//
+//        if (received && !GlobalLocationManager.disableUpdates) {
+//            const auto cos_val = cos(GlobalLocationManager.currentAngle);
+//            const auto sin_val = sin(GlobalLocationManager.currentAngle);
+//            GlobalLocationManager.currentLocation.X += abs(cos_val);
+//            GlobalLocationManager.currentLocation.Y += abs(sin_val);
+//            GlobalLocationManager.currentSegmentPosition +=1;
+//            
+//            
+//            String message = "Motion. Current coordinate ";
+//            message.concat(GlobalLocationManager.currentLocation.X);
+//            message.concat(", ");
+//            message.concat(GlobalLocationManager.currentLocation.Y);
+//            GlobalTracer.sendTrace(message);
+//        }
     }
 }

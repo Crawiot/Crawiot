@@ -24,7 +24,7 @@ void crawiotSetup() {
             .wiFiPassword = "12345678",
             .hostName = "crawiot.lan",
             .deviceIp = "192.168.4.1",
-            .firstSpeedDegree = 170,
+            .firstSpeedDegree = 120,
     };
     GlobalTracer.setup();
     GlobalLocationManager.currentLocation.X = 0;
