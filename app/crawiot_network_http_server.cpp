@@ -4,20 +4,29 @@
 #include "crawiot_location.h"
 #include "crawiot_mediator.h"
 #include "ArduinoJson.hpp"
+#include "crawiot_motion.h"
 
 ARDUINOJSON_NAMESPACE::StaticJsonDocument<1024> doc;
 
 WebServer webServer(80);
+
 void handlePostSubtargetsRequest();
+
 void handleGetTracesRequest();
+
 void handleGetLocationRequest();
+
 void clearDocAndBadRequest();
 
-bool Network::startHttpServer() {
+bool Network::startHttpServer(const Config &config) {
 
     webServer.on("/api/subtargets", HTTP_POST, handlePostSubtargetsRequest);
     webServer.on("/api/traces", handleGetTracesRequest);
     webServer.on("/api/location", handleGetLocationRequest);
+    if (config.enableMotionApi) {
+        registerMotionApi();
+    }
+
     webServer.begin();
     GlobalTracer.sendTrace("HTTP server started");
     return true;
@@ -34,7 +43,7 @@ void handlePostSubtargetsRequest() {
     }
 
     const auto size = array.size();
-    auto* subtargets = new Coordinates[size];
+    auto *subtargets = new Coordinates[size];
     for (size_t index = 0; index < size; index++) {
         subtargets[index] = {
                 .X = array.getElement(index)["x"].as<float>(),
@@ -52,8 +61,7 @@ void handlePostSubtargetsRequest() {
     doc.clear();
     if (wasPushed) {
         webServer.send(200);
-    }
-    else {
+    } else {
         webServer.send(500);
     }
 }

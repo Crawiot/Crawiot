@@ -19,7 +19,9 @@ private:
 
     bool enableDns(const char *hostName);
 
-    bool startHttpServer();
+    bool startHttpServer(const Config&);
+    
+    void registerMotionApi();
 
     DNSServer dnsServer;
     

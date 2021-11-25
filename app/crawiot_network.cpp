@@ -13,7 +13,7 @@ void Network::setup(const Config& config) {
         GlobalTracer.sendTrace("Failed to enable DNS");
     }
 
-    if (!this->startHttpServer()) {
+    if (!this->startHttpServer(config)) {
         GlobalTracer.sendTrace("Failed to start http server");
         return;
     }
