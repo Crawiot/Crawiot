@@ -64,10 +64,10 @@ void Tactical::makeRotation() {
                 : floor(angleDiff / 0.2261);
 
         GlobalLocationManager.disableUpdates = true;
-        MotionModule.execute(Stop);
+        MotionModule.executeEngineCommand(Stop);
 
         for (int i = 0; i < commandsToExecuteCount; i++) {
-            MotionModule.execute(direction);
+            MotionModule.executeEngineCommand(direction);
         }
         GlobalLocationManager.disableUpdates = false;
         GlobalLocationManager.currentAngle = targetAngle;
@@ -90,7 +90,7 @@ void Tactical::reach_current_target() {
 
     int counter = 0;
     while (counter < pathLength) {
-        MotionModule.execute(MoveForward);
+        MotionModule.executeEngineCommand(MoveForward);
         vTaskDelay(pdMS_TO_TICKS(500));
         counter++;
 
@@ -106,7 +106,7 @@ void Tactical::reach_current_target() {
         message.concat(GlobalLocationManager.currentLocation.Y);
         GlobalTracer.sendTrace(message);
     }
-    MotionModule.execute(Stop);
+    MotionModule.executeEngineCommand(Stop);
 
     this->hasCurrentTarget = false;
     this->needStop = true;

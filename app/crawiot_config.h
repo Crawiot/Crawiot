@@ -6,6 +6,7 @@ struct Config {
     const char* hostName;
     const char* deviceIp;
     const int firstSpeedDegree;
+    const bool enableMotionApi;
 };
 
 #endif //APP_CRAWIOT_CONFIG_H

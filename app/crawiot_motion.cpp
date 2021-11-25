@@ -22,7 +22,7 @@ void Motion::task() {
     this->tracker.task();
 }
 
-void Motion::execute(MotionEngineCommand command) {
+void Motion::executeEngineCommand(MotionEngineCommand command) {
     switch (command) {
         case MoveForward:
             moveTo(this->firstSpeedDegree);

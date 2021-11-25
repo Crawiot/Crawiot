@@ -15,7 +15,7 @@ enum MotionEngineCommand {
 class Motion {
 public:
     void setup(const Config&);
-    void execute(MotionEngineCommand);
+    void executeEngineCommand(MotionEngineCommand);
     void task();
 private:
     Servo servoMove;

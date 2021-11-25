@@ -25,6 +25,8 @@ void crawiotSetup() {
             .hostName = "crawiot.lan",
             .deviceIp = "192.168.4.1",
             .firstSpeedDegree = 120,
+
+            .enableMotionApi = true 
     };
     GlobalTracer.setup();
     GlobalLocationManager.currentLocation.X = 0;
@@ -41,16 +43,18 @@ void crawiotSetup() {
     }, "NetworkModule", 1024 * 3, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
 
     xTaskCreatePinnedToCore([](void *) {
-        StrategicModule.task();
-    }, "StrategicModule", 1024, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
-
-    xTaskCreatePinnedToCore([](void *) {
-        TacticalModule.task();
-    }, "TacticalModule", 1024, NULL, 2, NULL, ARDUINO_RUNNING_CORE);
-    
-    xTaskCreatePinnedToCore([](void *) {
         MotionModule.task();
     }, "MotionModule", 1024, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
+    
+    if (!config.enableMotionApi) {
+        xTaskCreatePinnedToCore([](void *) {
+            StrategicModule.task();
+        }, "StrategicModule", 1024, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
+
+        xTaskCreatePinnedToCore([](void *) {
+            TacticalModule.task();
+        }, "TacticalModule", 1024, NULL, 2, NULL, ARDUINO_RUNNING_CORE);
+    }
 }
 
 void crawiotLoop() {
