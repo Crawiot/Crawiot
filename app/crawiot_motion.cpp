@@ -16,6 +16,8 @@ void Motion::setup(const Config &config) {
     this->stop();
     this->servoRotate.write(85);
     this->servoMove.write(90);
+
+    motionApi.setup(config, servoMove, servoRotate);
 }
 
 void Motion::task() {

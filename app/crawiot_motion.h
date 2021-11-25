@@ -4,6 +4,7 @@
 #include <Servo.h>
 #include "crawiot_config.h"
 #include "crawiot_motion_tracker.h"
+#include "crawiot_motion_api.h"
 
 enum MotionEngineCommand {
     Stop,
@@ -17,6 +18,8 @@ public:
     void setup(const Config&);
     void executeEngineCommand(MotionEngineCommand);
     void task();
+
+    MotionApi motionApi;
 private:
     Servo servoMove;
     Servo servoRotate;
