@@ -3,19 +3,21 @@ from coordinates import Coordinates
 from typing import Tuple, List
 from itertools import chain
 
-def get_path(start_pos, end_pos, barriers: Tuple[Coordinates], borders: Tuple[Coordinates]):
 
+def get_path(start_pos, end_pos, barriers: Tuple[Coordinates], borders: Tuple[Coordinates]):
     # width and heigth of grid
     n = max(
-        borders[1].x - borders[0].x + 1, 
+        borders[1].x - borders[0].x + 1,
         borders[1].y - borders[0].y + 1
-        )
-    
+    )
+
     # moving the origin of the coordinate system (to eliminate negative values)
     norm_coords = borders[0]
+
     def update(example: Coordinates):
         example.x -= norm_coords.x
         example.y -= norm_coords.y
+        
     for example in barriers:
         update(example[0])
         update(example[1])
@@ -33,17 +35,17 @@ def get_path(start_pos, end_pos, barriers: Tuple[Coordinates], borders: Tuple[Co
     pt_to_ind = dict()
     for x in range(n):
         for y in range(n):
-            pt_to_ind[x * n + y] = (x, y)
+            pt_to_ind[x * n + y] = Coordinates(x, y)
     graph = [[] for _ in range(n * n)]
     for x in range(n):
         for y in range(n):
-            
+
             def add_edge(node1, node2):
                 if not grid[node1[0]][node1[1]] or not grid[node2[0]][node2[1]]:
                     return None
                 graph[node1[0] * n + node1[1]].append(node2[0] * n + node2[1])
                 graph[node2[0] * n + node2[1]].append(node1[0] * n + node1[1])
-            
+
             if x > 0: add_edge((x, y), (x - 1, y))
             if y > 0: add_edge((x, y), (x, y - 1))
 
@@ -54,7 +56,7 @@ def get_path(start_pos, end_pos, barriers: Tuple[Coordinates], borders: Tuple[Co
     path = list(map(lambda ind: pt_to_ind[ind], path))
 
     # restoring original coordinates
-    norm_coords = -norm_coords
+    norm_coords = Coordinates(-norm_coords.x, -norm_coords.y)
     for node in path:
         update(node)
 
