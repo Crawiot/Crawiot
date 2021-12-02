@@ -8,3 +8,6 @@ class Coordinates:
 
     def to_point(self):
         return geoma.Point(self.x, self.y)
+
+    def __str__(self):
+        return f"({self.x},{self.y})"
