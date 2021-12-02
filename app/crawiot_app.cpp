@@ -41,12 +41,12 @@ void crawiotSetup() {
     xTaskCreatePinnedToCore([](void *) {
         NetworkModule.task();
     }, "NetworkModule", 1024 * 3, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
-
-    xTaskCreatePinnedToCore([](void *) {
-        MotionModule.task();
-    }, "MotionModule", 1024, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
     
     if (!config.enableMotionApi) {
+        xTaskCreatePinnedToCore([](void *) {
+            MotionModule.task();
+        }, "MotionModule", 1024, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
+        
         xTaskCreatePinnedToCore([](void *) {
             StrategicModule.task();
         }, "StrategicModule", 1024, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
